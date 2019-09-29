@@ -1,0 +1,5 @@
+# git ignore file
+__vm/
+*.xml
+*cppproj
+Debug/
