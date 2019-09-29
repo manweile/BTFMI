@@ -6,3 +6,4 @@ __vm/
 # file ext to ignore
 *.xml
 *.cppproj
+*.atsln
