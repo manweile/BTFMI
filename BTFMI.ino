@@ -293,3 +293,19 @@ void greenBtn()
 	tft.println("OFF");
 	RecordOn = true;
 }
+
+/**
+* Prints text to touch screen
+* param {String} input text the text to print to screen
+*/
+void printText(String inputText)
+{
+	//set cursor position
+
+	//set text color
+
+	// set text size
+
+	// print the input text
+
+}
