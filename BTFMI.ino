@@ -224,7 +224,7 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = defBroadcast;
 
 	//scan the fm band from loEnd to hiEnd in .2 Mhz increments, save frequencies with low enough noise level
-	printf("\nScanning for available frequencies ...\n\n");
+	Serial.print("\nScanning for available frequencies ...\n\n");
 	for (freq = loEnd; freq <= hiEnd; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
@@ -241,7 +241,7 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	// sort by low noise level ascending, take lowest noise level as new broadcast frequency
 	sort(scannedFreqs.begin(), scannedFreqs.end(), sort_pred());
 
-	printf("\nSorted available frequencies\n\n");
+	Serial.print("\nSorted available frequencies\n\n");
 	for(int i = 0; i < scannedFreqs.size(); i++) {
 		if(showInfo){
 			// @TODO use PrintEx.h?
@@ -252,7 +252,7 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = scannedFreqs[0].first;
 
 	//display new frequency
-	printf("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
+	Serial.print("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
 	// @TODO use PrintEx.h?
 	Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz with Current Noise Level: "); Serial.println(scannedFreqs[0].second);
 
