@@ -18,13 +18,23 @@
 
  ****************************************************/
 
-#include <Adafruit_Si4713.h>
+//arduino libraries
 #include <ArduinoSTL.h>
+#include <SPI.h>
+
+//third party function libraries
 //#include <PrintEx.h>
-#include <Wire.h>
 #include <algorithm>
 #include <vector>
 
+//third party hardware libraries
+#include <Adafruit_Si4713.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_ILI9341.h>
+#include <Adafruit_FT6206.h>
+#include <Wire.h>
+
+//fm definitions
 #define RESETPIN 22				//pin to use on mega 2560
 #define FMSTATION 8770			// default station 8770 == 87.70 MHz
 #define BAUD 115200				// use default upload speed for convenience
@@ -32,26 +42,60 @@
 #define MIN_FREQ 8770			// lower end of FM band
 #define TX_POWER 115			// dBuV, 88-115 max
 #define BROADCAST_LEVEL 60		// noise level for broadcasting stations
+
+//fm debugging flags
 #define USE_AVAILABLE false
 #define SHOW_SCANNED false
 
+//capacitive touch definitions
+#define TFT_CS 10
+#define TFT_DC 9
+#define FRAME_X 10
+#define FRAME_Y 10
+#define FRAME_W 100
+#define FRAME_H 50
+
+#define REDBUTTON_X FRAME_X
+#define REDBUTTON_Y FRAME_Y
+#define REDBUTTON_W (FRAME_W/2)
+#define REDBUTTON_H FRAME_H
+
+#define GREENBUTTON_X (REDBUTTON_X + REDBUTTON_W)
+#define GREENBUTTON_Y FRAME_Y
+#define GREENBUTTON_W (FRAME_W/2)
+#define GREENBUTTON_H FRAME_H
 
 Adafruit_Si4713 radio = Adafruit_Si4713(RESETPIN);
+
+Adafruit_FT6206 ts = Adafruit_FT6206();
+Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+
+boolean RecordOn = false;
 
 void setup() {
 	int freq;
 	int station;
 
 	Serial.begin(BAUD);
-	printf("\nGAM Radio\n");
+
+	Serial.print("\nGAM Radio\n");
+
+	// start & check the cap screen
+	tft.begin();
+	if (!ts.begin(40)) {
+		Serial.print("Unable to start touchscreen\n");
+	}
+	else {
+		Serial.print("Touchscreen started\n");
+	}
 
 	// begin with address 0x63 (CS high default)
 	if (! radio.begin()) {
-		printf("Couldn't find radio Si4713 transciever\n");
+		Serial.print("Couldn't find radio Si4713 transciever\n");
 		while (1);
 	}
 
-	printf("\nScanning for broadcasting stations ...\n\n");
+	Serial.print("\nScanning for broadcasting stations ...\n\n");
 	for (freq = MIN_FREQ; freq <= MAX_FREQ; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
@@ -85,11 +129,50 @@ void setup() {
 	Serial.print("\tCurr ANT capacitance: "); Serial.print(radio.currAntCap); Serial.print("\n");
 
 	// set GP1 and GP2 to output
-	radio.setGPIOctrl(_BV(1) | _BV(2));
+	//radio.setGPIOctrl(_BV(1) | _BV(2));
+
+	tft.fillScreen(ILI9341_BLACK);
+	// origin = left,top landscape (USB left upper)
+	tft.setRotation(1);
+	redBtn();
 }
 
 void loop() {
 	// @TODO use PrintEx.h?
+
+	// cap screen
+	if (ts.touched())
+	{
+		// Retrieve a point
+		TS_Point p = ts.getPoint();
+		// rotate coordinate system
+		// flip it around to match the screen.
+		p.x = map(p.x, 0, 240, 240, 0);
+		p.y = map(p.y, 0, 320, 320, 0);
+		int y = tft.height() - p.x;
+		int x = p.y;
+
+		if (RecordOn)
+		{
+			if((x > REDBUTTON_X) && (x < (REDBUTTON_X + REDBUTTON_W))) {
+				if ((y > REDBUTTON_Y) && (y <= (REDBUTTON_Y + REDBUTTON_H))) {
+					//Serial.print("Red btn hit\n");
+					redBtn();
+				}
+			}
+		}
+		else //Record is off (RecordOn == false)
+		{
+			if((x > GREENBUTTON_X) && (x < (GREENBUTTON_X + GREENBUTTON_W))) {
+				if ((y > GREENBUTTON_Y) && (y <= (GREENBUTTON_Y + GREENBUTTON_H))) {
+					//Serial.print("Green btn hit\n");
+					greenBtn();
+				}
+			}
+		}
+
+		//Serial.println(RecordOn);
+	}
 
 	// @TODO I want to see current antenna capacitance
 	radio.readTuneStatus();
@@ -104,12 +187,16 @@ void loop() {
 	// @TODO if ASQ is not over modulating, increase rn-52 output volume 1 step and print to screen
 
 	// toggle GPO1 and GPO2
-	radio.setGPIO(_BV(1));
-	delay(500);
-	radio.setGPIO(_BV(2));
-	delay(500);
+	//radio.setGPIO(_BV(1));
+	//delay(500);
+	//radio.setGPIO(_BV(2));
+	//delay(500);
 }
 
+
+/**
+* FM Functions
+*/
 
 /**
 * scans FM band for stations that are not being used and returns lowest noise level frequency
@@ -172,4 +259,37 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	// save new broadcast frequency to either eeprom (preferable) or sd and return it
 
 	return newBroadcast;
+}
+
+/**
+* Capacitive Touch Functions
+*/
+
+void drawFrame()
+{
+	tft.drawRect(FRAME_X, FRAME_Y, FRAME_W, FRAME_H, ILI9341_BLACK);
+}
+
+void redBtn()
+{
+	tft.fillRect(REDBUTTON_X, REDBUTTON_Y, REDBUTTON_W, REDBUTTON_H, ILI9341_RED);
+	tft.fillRect(GREENBUTTON_X, GREENBUTTON_Y, GREENBUTTON_W, GREENBUTTON_H, ILI9341_BLUE);
+	drawFrame();
+	tft.setCursor(GREENBUTTON_X + 6 , GREENBUTTON_Y + (GREENBUTTON_H/2));
+	tft.setTextColor(ILI9341_WHITE);
+	tft.setTextSize(2);
+	tft.println("ON");
+	RecordOn = false;
+}
+
+void greenBtn()
+{
+	tft.fillRect(GREENBUTTON_X, GREENBUTTON_Y, GREENBUTTON_W, GREENBUTTON_H, ILI9341_GREEN);
+	tft.fillRect(REDBUTTON_X, REDBUTTON_Y, REDBUTTON_W, REDBUTTON_H, ILI9341_BLUE);
+	drawFrame();
+	tft.setCursor(REDBUTTON_X + 6 , REDBUTTON_Y + (REDBUTTON_H/2));
+	tft.setTextColor(ILI9341_WHITE);
+	tft.setTextSize(2);
+	tft.println("OFF");
+	RecordOn = true;
 }
