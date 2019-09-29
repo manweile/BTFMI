@@ -3,3 +3,4 @@ __vm/
 *.xml
 *cppproj
 Debug/
+.vs/
