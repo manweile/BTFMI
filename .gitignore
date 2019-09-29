@@ -1,7 +1,8 @@
-# git ignore file
-__vm/
-*.xml
-*cppproj
-Debug/
+# folders to ignore
 .vs/
+Debug/
 Release/
+__vm/
+# file ext to ignore
+*.xml
+*.cppproj
