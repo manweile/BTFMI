@@ -296,7 +296,7 @@ void greenBtn()
 
 /**
 * Prints text to touch screen
-* param {String} input text the text to print to screen
+* @param{String} input text the text to print to screen
 */
 void printText(String inputText)
 {
