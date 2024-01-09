@@ -48,8 +48,10 @@
 #define SHOW_SCANNED false
 
 //capacitive touch definitions
+#define SD_CS 4
 #define TFT_CS 10
 #define TFT_DC 9
+
 #define FRAME_X 10
 #define FRAME_Y 10
 #define FRAME_W 100
@@ -78,30 +80,41 @@ void setup() {
 
 	Serial.begin(BAUD);
 
-	Serial.print("\nGAM Radio\n");
-
 	// start & check the cap screen
 	tft.begin();
 	if (!ts.begin(40)) {
 		Serial.print("Unable to start touchscreen\n");
+		delay(500);
+		exit(1);
 	}
 	else {
-		Serial.print("Touchscreen started\n");
+		tft.setRotation(1);
+		tft.fillScreen(ILI9341_BLACK);
+		tft.setCursor(0, 0);
+		tft.setTextColor(ILI9341_WHITE);
+		tft.setTextSize(3);
+		tft.println("GAM Radio\n");
 	}
+
+	tft.setTextSize(1);
 
 	// begin with address 0x63 (CS high default)
 	if (! radio.begin()) {
-		Serial.print("Couldn't find radio Si4713 transciever\n");
-		while (1);
+		tft.println("Couldn't find Si4713 transciever\n");
+		Serial.print("Couldn't find Si4713 transciever\n");
+		delay(500);
+		exit(2);
 	}
 
-	Serial.print("\nScanning for broadcasting stations ...\n\n");
+	//Serial.print("\nScanning for broadcasting stations ...\n\n");
+	tft.println("\nScanning for broadcasting stations ...\n\n");
 	for (freq = MIN_FREQ; freq <= MAX_FREQ; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
 		if( radio.currNoiseLevel >= BROADCAST_LEVEL) {
 			// @TODO use PrintEx.h?
-			Serial.print("Broadcast station at "); Serial.print(freq/100.00); Serial.print(" Mhz, Current Noise Level: "); Serial.println(radio.currNoiseLevel);
+			//Serial.print("Broadcast station at "); Serial.print(freq/100.00); Serial.print(" Mhz, Current Noise Level: "); Serial.println(radio.currNoiseLevel);
+			tft.print("Broadcast station at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
 		}
 	}
 
@@ -109,31 +122,36 @@ void setup() {
 
 	// @TODO use PrintEx.h?
 	Serial.print("\nSet TX power: "); Serial.print(TX_POWER); Serial.println(" dBuV");
+	tft.print("\nSet TX power: "); tft.print(TX_POWER); tft.println(" dBuV");
 	radio.setTXpower(TX_POWER);
 
 	// @TODO use PrintEx.h?
 	if(USE_AVAILABLE) {
 		station = availableChannels(BROADCAST_LEVEL, FMSTATION, MIN_FREQ, MAX_FREQ, SHOW_SCANNED);
-		Serial.print("\nTuning into frequency "); Serial.print(station/100.00); Serial.println(" Mhz\n");
+		//Serial.println("\nTuning into frequency "); Serial.print(station/100.00); Serial.println(" Mhz\n");
+		tft.println("\nTuning into frequency "); tft.print(station/100.00); tft.println(" Mhz\n");
 		radio.tuneFM(station);
 	}
 	else {
-		Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.println(" Mhz\n");
+		//Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.println(" Mhz\n");
+		tft.print("\nTuning into debugging frequency "); tft.print(FMSTATION/100.00); Serial.println(" Mhz\n");
 		radio.tuneFM(FMSTATION);
 	}
 
 	// This will tell you the status in case you want to read it from the chip
 	// @TODO use PrintEx.h?
 	radio.readTuneStatus();
-	Serial.print("Curr frequency: "); Serial.print(radio.currFreq/100.00); Serial.print("\tCurr frequency dBuV: ");   Serial.print(radio.currdBuV);
-	Serial.print("\tCurr ANT capacitance: "); Serial.print(radio.currAntCap); Serial.print("\n");
+	//Serial.print("Curr frequency: "); Serial.print(radio.currFreq/100.00); Serial.print("\tCurr frequency dBuV: ");   Serial.print(radio.currdBuV);
+	tft.print("Curr frequency: "); tft.print(radio.currFreq/100.00); tft.print("\tCurr frequency dBuV: ");   tft.print(radio.currdBuV);
+	//Serial.print("\tCurr ANT capacitance: "); Serial.print(radio.currAntCap); Serial.print("\n");
+	tft.print("\tCurr ANT capacitance: "); tft.print(radio.currAntCap); tft.print("\n");
 
 	// set GP1 and GP2 to output
 	//radio.setGPIOctrl(_BV(1) | _BV(2));
 
-	tft.fillScreen(ILI9341_BLACK);
+	//tft.fillScreen(ILI9341_BLACK);
 	// origin = left,top landscape (USB left upper)
-	tft.setRotation(1);
+	//tft.setRotation(1);
 	redBtn();
 }
 
@@ -224,7 +242,8 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = defBroadcast;
 
 	//scan the fm band from loEnd to hiEnd in .2 Mhz increments, save frequencies with low enough noise level
-	Serial.print("\nScanning for available frequencies ...\n\n");
+	//Serial.print("\nScanning for available frequencies ...\n\n");
+	printf("\nScanning for available frequencies ...\n\n");
 	for (freq = loEnd; freq <= hiEnd; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
@@ -241,7 +260,8 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	// sort by low noise level ascending, take lowest noise level as new broadcast frequency
 	sort(scannedFreqs.begin(), scannedFreqs.end(), sort_pred());
 
-	Serial.print("\nSorted available frequencies\n\n");
+	//Serial.print("\nSorted available frequencies\n\n");
+	printf("\nSorted available frequencies\n\n");
 	for(int i = 0; i < scannedFreqs.size(); i++) {
 		if(showInfo){
 			// @TODO use PrintEx.h?
@@ -252,7 +272,8 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = scannedFreqs[0].first;
 
 	//display new frequency
-	Serial.print("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
+	//Serial.print("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
+	printf("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
 	// @TODO use PrintEx.h?
 	Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz with Current Noise Level: "); Serial.println(scannedFreqs[0].second);
 
