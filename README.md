@@ -42,29 +42,39 @@ Required Libraries:
 		Sparkfun  Audio Bluetooth Breakout - RN-52
 			https://www.sparkfun.com/products/retired/12849
 			https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview
-			
+
 Power
-First and foremost, the RN-52 is a 3.3V device. It can handle an input voltage of about 3.0 - 3.6V. Voltages above or below this range can result in the module not working properly or, worse, damaging the module. Make sure you select a power supply that can provide the correct amount of voltage to the device.
+First and foremost, the RN-52 is a 3.3V device.
+It can handle an input voltage of about 3.0 - 3.6V.
+Voltages above or below this range can result in the module not working properly or, worse, damaging the module.
+Make sure you select a power supply that can provide the correct amount of voltage to the device.
 As usual, connect the GND pin to GND, and connect the 3.3V pin to the Vcc pin on the supply.
-The PWR_EN pin can also be attached to a button to allow the user to power up the module when it is desired, even if power is already supplied. This is useful in headset/hands-free applications where a battery is attached to the module but the module doesn't need to be on all the time.
+The PWR_EN pin can also be attached to a button to allow the user to power up the module when it is desired, even if power is already supplied.
+This is useful in headset/hands-free applications where a battery is attached to the module but the module doesn't need to be on all the time.
 
 Screenshot here
 
 GPIO4
 Restore Factory Defualts with GPIO4
-You should connect the GPIO4 pin to a switch, jumper, or resistor so it can be accessed. You can use this pin
-to reset the module to its factory default settings, which is critical in situations where the module has been mis-configured. To reset the module to the factory defaults, GPIO4 should be high on power-up and then toggle
-low, high, low, high with a 1 second wait between the transitions.
+You should connect the GPIO4 pin to a switch, jumper, or resistor so it can be accessed.
+You can use this pin to reset the module to its factory default settings, which is critical in situations where the module has been mis-configured.
+To reset the module to the factory defaults, GPIO4 should be high on power-up and then toggle low, high, low, high with a 1 second wait between the transitions.
 
 Screenshot here
 
 GPIO9
-GPIO9 is used to tell the module to enter command mode. If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data. In order to enter command mode, GPIO9 must be pulled LOW. This can be accomplished by simply connecting GPIO9 to GND with a jumper wire. In this example, a switch is used to easily enter and exit command mode.
+GPIO9 is used to tell the module to enter command mode.
+If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data.
+In order to enter command mode, GPIO9 must be pulled LOW.
+This can be accomplished by simply connecting GPIO9 to GND with a jumper wire.
+In this example, a switch is used to easily enter and exit command mode.
 
 Screenshot here
 
 UART
-You will need a way to communicate to the module and send commands. This will be accomplished with a 3.3V FTDI Basic. Connect GND to GND, TXO to UART_RX, and RXI to UART_TX. Those are the only connections needed to talk to the module.
+You will need a way to communicate to the module and send commands.
+This will be accomplished with a 3.3V FTDI Basic. Connect GND to GND, TXO to UART_RX, and RXI to UART_TX.
+Those are the only connections needed to talk to the module.
 
 Screenshot here
 
@@ -76,6 +86,5 @@ Now that you can actually power up the RN-52 and send it into command mode, let'
     The two status LEDs should both stay solid for about 1 second and then begin flashing alternately.
     Your device is now ready to make a connection. Rather than connect over Bluetooth, the connection will be made over the serial UART.
     Open a terminal window on the port your RN-52 has been assigned (115200 Baud, 8,N,1).
-    With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND). You should now see CMD appear in your terminal.
-
-
+    With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND).
+	You should now see CMD appear in your terminal.
