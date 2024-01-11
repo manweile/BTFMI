@@ -5,9 +5,9 @@ For audio streaming from Android mobile to FM radio
 
 ## Required Libraries:
 ### Arduino hardware libraries:
-SPI 
+SPI
 https://www.arduino.cc/reference/en/language/functions/communication/spi/
-Wire 
+Wire
 https://www.arduino.cc/reference/en/language/functions/communication/wire/
 
 ### Third party function libraries:
@@ -24,10 +24,10 @@ https://www.arduino.cc/reference/en/libraries/printex/
 v1.2.0
 
 ### Third party hardware & libraries:
-2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd 
+2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
 https://www.adafruit.com/product/1947
 
-Adafruit_FT6206		
+Adafruit_FT6206
 https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/
 v1.03
 
@@ -93,3 +93,5 @@ Your device is now ready to make a connection. Rather than connect over Bluetoot
 Open a terminal window on the port your RN-52 has been assigned (115200 Baud, 8,N,1).
 With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND).
 You should now see CMD appear in your terminal.
+
+IPSUM LOREM
