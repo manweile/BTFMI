@@ -80,71 +80,79 @@ void setup() {
 
 	Serial.begin(BAUD);
 
-	// start & check the cap screen
+	// start the cap screen
 	tft.begin();
+
+	// error and exit
 	if (!ts.begin(40)) {
-		Serial.print("Unable to start touchscreen\n");
+		// serial 'cause tft screen failed
+		Serial.println("Unable to start touchscreen");
 		delay(500);
 		exit(1);
-	}
-	else {
+	} else {
+		// config tft screen
 		tft.setRotation(1);
 		tft.fillScreen(ILI9341_BLACK);
 		tft.setCursor(0, 0);
 		tft.setTextColor(ILI9341_WHITE);
 		tft.setTextSize(3);
-		tft.println("GAM Radio\n");
+
+		// print station name
+		tft.println("GAM Radio");
 	}
 
+    // reset for screen space saving
 	tft.setTextSize(1);
 
 	// begin with address 0x63 (CS high default)
 	if (! radio.begin()) {
-		tft.println("Couldn't find Si4713 transciever\n");
-		Serial.print("Couldn't find Si4713 transciever\n");
+		tft.println("Couldn't find Si4713 transceiver");
 		delay(500);
 		exit(2);
 	}
 
-	//Serial.print("\nScanning for broadcasting stations ...\n\n");
-	tft.println("\nScanning for broadcasting stations ...\n\n");
+	tft.println("Scanning for broadcasting stations ...");
+	tft.println();
+
 	for (freq = MIN_FREQ; freq <= MAX_FREQ; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
 		if( radio.currNoiseLevel >= BROADCAST_LEVEL) {
 			// @TODO use PrintEx.h?
-			//Serial.print("Broadcast station at "); Serial.print(freq/100.00); Serial.print(" Mhz, Current Noise Level: "); Serial.println(radio.currNoiseLevel);
-			tft.print("Broadcast station at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
+			tft.print("Broadcast at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
+			tft.println();
 		}
 	}
 
 	// station = availableChannels(BROADCAST_LEVEL, FMSTATION, MIN_FREQ, MAX_FREQ, SHOW_SCANNED);
 
 	// @TODO use PrintEx.h?
-	Serial.print("\nSet TX power: "); Serial.print(TX_POWER); Serial.println(" dBuV");
-	tft.print("\nSet TX power: "); tft.print(TX_POWER); tft.println(" dBuV");
+	tft.print("\nSet TX power: "); tft.print(TX_POWER); tft.print(" dBuV");
 	radio.setTXpower(TX_POWER);
 
 	// @TODO use PrintEx.h?
 	if(USE_AVAILABLE) {
 		station = availableChannels(BROADCAST_LEVEL, FMSTATION, MIN_FREQ, MAX_FREQ, SHOW_SCANNED);
 		//Serial.println("\nTuning into frequency "); Serial.print(station/100.00); Serial.println(" Mhz\n");
-		tft.println("\nTuning into frequency "); tft.print(station/100.00); tft.println(" Mhz\n");
+		tft.print("\nTuning into frequency "); tft.print(station/100.00); tft.print(" Mhz");
+		tft.println();
 		radio.tuneFM(station);
 	}
 	else {
 		//Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.println(" Mhz\n");
-		tft.print("\nTuning into debugging frequency "); tft.print(FMSTATION/100.00); Serial.println(" Mhz\n");
+		tft.print("\nTuning into debugging frequency "); tft.print(FMSTATION/100.00); tft.print(" Mhz");
+		tft.println();
 		radio.tuneFM(FMSTATION);
 	}
 
 	// This will tell you the status in case you want to read it from the chip
 	// @TODO use PrintEx.h?
 	radio.readTuneStatus();
-	//Serial.print("Curr frequency: "); Serial.print(radio.currFreq/100.00); Serial.print("\tCurr frequency dBuV: ");   Serial.print(radio.currdBuV);
-	tft.print("Curr frequency: "); tft.print(radio.currFreq/100.00); tft.print("\tCurr frequency dBuV: ");   tft.print(radio.currdBuV);
-	//Serial.print("\tCurr ANT capacitance: "); Serial.print(radio.currAntCap); Serial.print("\n");
-	tft.print("\tCurr ANT capacitance: "); tft.print(radio.currAntCap); tft.print("\n");
+
+	tft.print("\nCurr frequency: "); tft.print(radio.currFreq/100.00);
+	tft.print("\nCurr frequency dBuV: "); tft.print(radio.currdBuV);
+	tft.print("\nCurr ANT capacitance: "); tft.print(radio.currAntCap);
+	tft.println();
 
 	// set GP1 and GP2 to output
 	//radio.setGPIOctrl(_BV(1) | _BV(2));
@@ -298,7 +306,7 @@ void redBtn()
 	drawFrame();
 	tft.setCursor(GREENBUTTON_X + 6 , GREENBUTTON_Y + (GREENBUTTON_H/2));
 	tft.setTextColor(ILI9341_WHITE);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println("ON");
 	RecordOn = false;
 }
@@ -310,7 +318,7 @@ void greenBtn()
 	drawFrame();
 	tft.setCursor(REDBUTTON_X + 6 , REDBUTTON_Y + (REDBUTTON_H/2));
 	tft.setTextColor(ILI9341_WHITE);
-	tft.setTextSize(2);
+	tft.setTextSize(1);
 	tft.println("OFF");
 	RecordOn = true;
 }
