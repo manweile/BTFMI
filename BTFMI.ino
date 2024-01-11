@@ -72,7 +72,7 @@ Adafruit_Si4713 radio = Adafruit_Si4713(RESETPIN);
 Adafruit_FT6206 ts = Adafruit_FT6206();
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
-boolean RecordOn = false;
+boolean recordOn = false;
 
 void setup() {
 	int freq;
@@ -97,7 +97,7 @@ void setup() {
 		tft.setTextColor(ILI9341_WHITE);
 		tft.setTextSize(3);
 
-		// print station name
+		// now we can use tft.print and println
 		tft.println("GAM Radio");
 	}
 
@@ -178,7 +178,7 @@ void loop() {
 		int y = tft.height() - p.x;
 		int x = p.y;
 
-		if (RecordOn)
+		if (recordOn)
 		{
 			if((x > REDBUTTON_X) && (x < (REDBUTTON_X + REDBUTTON_W))) {
 				if ((y > REDBUTTON_Y) && (y <= (REDBUTTON_Y + REDBUTTON_H))) {
@@ -187,7 +187,7 @@ void loop() {
 				}
 			}
 		}
-		else //Record is off (RecordOn == false)
+		else //Record is off (recordOn == false)
 		{
 			if((x > GREENBUTTON_X) && (x < (GREENBUTTON_X + GREENBUTTON_W))) {
 				if ((y > GREENBUTTON_Y) && (y <= (GREENBUTTON_Y + GREENBUTTON_H))) {
@@ -196,8 +196,6 @@ void loop() {
 				}
 			}
 		}
-
-		//Serial.println(RecordOn);
 	}
 
 	// @TODO I want to see current antenna capacitance
@@ -250,7 +248,6 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = defBroadcast;
 
 	//scan the fm band from loEnd to hiEnd in .2 Mhz increments, save frequencies with low enough noise level
-	//Serial.print("\nScanning for available frequencies ...\n\n");
 	printf("\nScanning for available frequencies ...\n\n");
 	for (freq = loEnd; freq <= hiEnd; freq += 20) {
 		radio.readTuneMeasure(freq);
@@ -280,7 +277,6 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = scannedFreqs[0].first;
 
 	//display new frequency
-	//Serial.print("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
 	printf("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
 	// @TODO use PrintEx.h?
 	Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz with Current Noise Level: "); Serial.println(scannedFreqs[0].second);
@@ -308,7 +304,7 @@ void redBtn()
 	tft.setTextColor(ILI9341_WHITE);
 	tft.setTextSize(1);
 	tft.println("ON");
-	RecordOn = false;
+	recordOn = false;
 }
 
 void greenBtn()
@@ -320,7 +316,7 @@ void greenBtn()
 	tft.setTextColor(ILI9341_WHITE);
 	tft.setTextSize(1);
 	tft.println("OFF");
-	RecordOn = true;
+	recordOn = true;
 }
 
 /**
