@@ -119,7 +119,3 @@ IPSUM LOREM
 ### 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
 
 IPSUM LOREM
-
-
-
-
