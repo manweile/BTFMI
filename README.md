@@ -1,6 +1,5 @@
 # BTFMI
-
-## Bluetooth to FM tranmsitter
+Bluetooth to FM tranmsitter
 For audio streaming from Android mobile to FM radio
 
 ## Required Libraries:
