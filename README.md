@@ -6,13 +6,13 @@ For audio streaming from Android mobile to FM radio
 
 ### Bill of Materials
 
-| Item		| Count		| Link		| Part Number |
+| Item | Count | Link | Part Number |
 | --------- | --------- | --------- |
 | Arduino Mega2560 R3 | 1 | add link here | add Part Number |
-| Atmel-ICE Basic | 1 | add link here | add Part Number |
+| Atmel-ICE Basic     | 1 | add link here | add Part Number |
 | 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd | 1 | [2.8" TFT Touch Shield](https://www.adafruit.com/product/1947) | add Part Number |
-|Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713 | 1 | [Adafruit Stereo FM Tranmitter](https://www.adafruit.com/product/1958)| add Part Number |
-| Sparkfun  Audio Bluetooth Breakout - RN-52 | 1 | [Sparkfun Audio Bluetooth Breakout](https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview)| add Part Number |
+| Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713 | 1 | [Adafruit Stereo FM Tranmitter](https://www.adafruit.com/product/1958) | add Part Number |
+| Sparkfun  Audio Bluetooth Breakout - RN-52 | 1 | [Sparkfun Audio Bluetooth Breakout](https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview) | add Part Number |
 
 ## Required Libraries:
 
