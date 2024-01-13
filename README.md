@@ -1,5 +1,5 @@
 # BTFMI
-Bluetooth to FM tranmsitter
+Bluetooth to FM Tranmsitter
 For audio streaming from Android mobile to FM radio
 
 ## Required Libraries:
@@ -12,6 +12,7 @@ https://www.arduino.cc/reference/en/language/functions/communication/wire/
 ### Third party function libraries:
 NB: per https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3
 Downgrade Arduino AVR Boards to 1.82 (use Arduino IDE tools>Board>Board Manager)
+
 ArduinoSTL
 https://www.arduino.cc/reference/en/libraries/arduinostl/
 v1.1.0
