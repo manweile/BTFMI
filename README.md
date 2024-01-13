@@ -1,60 +1,52 @@
 # BTFMI
-Bluetooth to FM Tranmsitter
+
+Bluetooth to FM Tranmsitter 
+
 For audio streaming from Android mobile to FM radio
 
-## Bill of Materials
-Arduino Mega 2560 R3
-IPSUM LOREM link
+### Bill of Materials
 
-Atmel-ICE Basic
-IPSUM LOREM
-
-2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
-https://www.adafruit.com/product/1947
-
-Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713
-https://www.adafruit.com/product/1958
-
-Sparkfun  Audio Bluetooth Breakout - RN-52
-https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview
+| Item		| Count		| Link		| Part Number |
+| --------- | --------- | --------- |
+| Arduino Mega2560 R3 | 1 | add link here | add Part Number |
+| Atmel-ICE Basic | 1 | add link here | add Part Number |
+| 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd | 1 | [2.8" TFT Touch Shield](https://www.adafruit.com/product/1947) | add Part Number |
+|Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713 | 1 | [Adafruit Stereo FM Tranmitter](https://www.adafruit.com/product/1958)| add Part Number |
+| Sparkfun  Audio Bluetooth Breakout - RN-52 | 1 | [Sparkfun Audio Bluetooth Breakout](https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview)| add Part Number |
 
 ## Required Libraries:
+
 ### Arduino hardware libraries:
-SPI
-https://www.arduino.cc/reference/en/language/functions/communication/spi/
-Wire
-https://www.arduino.cc/reference/en/language/functions/communication/wire/
+
+[SPI](https://www.arduino.cc/reference/en/language/functions/communication/spi/)
+
+[Wire](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
 
 ### Third party function libraries:
-NB: per https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3
-Downgrade Arduino AVR Boards to 1.82 (use Arduino IDE tools>Board>Board Manager)
 
-ArduinoSTL
-https://www.arduino.cc/reference/en/libraries/arduinostl/
+**IMPORTANT**
+
+[Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
+
+(use Arduino IDE tools>Board>Board Manager)
+
+[ArduinoSTL](https://www.arduino.cc/reference/en/libraries/arduinostl/)
 v1.1.0
-algorithm
-vector
 
-PrintEx
-https://www.arduino.cc/reference/en/libraries/printex/
-v1.2.0
+1. algorithm
+2. vector
+
+[PrintEx](https://www.arduino.cc/reference/en/libraries/printex/) v1.2.0
 
 ### Third party hardware & libraries:
-Adafruit_FT6206
-https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/
-v1.03
 
-Adafruit_GFX
-https://www.arduino.cc/reference/en/libraries/adafruit-gfx-library/
-v1.5.7
+[Adafruit_FT6206](https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/) v1.03
 
-Adafruit_ILI9341
-https://www.arduino.cc/reference/en/libraries/adafruit-ili9341/
-v1.5.1
+[Adafruit_GFX](https://www.arduino.cc/reference/en/libraries/adafruit-gfx-library/) v1.5.7
 
-Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713
-https://www.arduino.cc/reference/en/libraries/adafruit-si4713-library/
-v1.0.0
+[Adafruit_ILI9341](https://www.arduino.cc/reference/en/libraries/adafruit-ili9341/) v1.5.1
+
+[Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713](https://www.arduino.cc/reference/en/libraries/adafruit-si4713-library/) v1.0.0
 
 ## Hardware Details
 ### Arduino Mega 2560 R3
