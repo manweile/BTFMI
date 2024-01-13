@@ -6,8 +6,8 @@ For audio streaming from Android mobile to FM radio
 
 ### Bill of Materials
 
-| Item | Count | Link | Part Number |
-| --------- | --------- | --------- |
+| Item      | Count     | Link      | Part Number |
+| --------- | --------- | --------- | ----------- |
 | Arduino Mega2560 R3 | 1 | add link here | add Part Number |
 | Atmel-ICE Basic     | 1 | add link here | add Part Number |
 | 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd | 1 | [2.8" TFT Touch Shield](https://www.adafruit.com/product/1947) | add Part Number |
