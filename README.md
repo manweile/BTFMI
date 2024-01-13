@@ -2,6 +2,22 @@
 Bluetooth to FM Tranmsitter
 For audio streaming from Android mobile to FM radio
 
+## Bill of Materials
+Arduino Mega 2560 R3
+IPSUM LOREM link
+
+Atmel-ICE Basic
+IPSUM LOREM
+
+2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
+https://www.adafruit.com/product/1947
+
+Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713
+https://www.adafruit.com/product/1958
+
+Sparkfun  Audio Bluetooth Breakout - RN-52
+https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview
+
 ## Required Libraries:
 ### Arduino hardware libraries:
 SPI
@@ -24,9 +40,6 @@ https://www.arduino.cc/reference/en/libraries/printex/
 v1.2.0
 
 ### Third party hardware & libraries:
-2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
-https://www.adafruit.com/product/1947
-
 Adafruit_FT6206
 https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/
 v1.03
@@ -40,15 +53,18 @@ https://www.arduino.cc/reference/en/libraries/adafruit-ili9341/
 v1.5.1
 
 Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713
-https://www.adafruit.com/product/1958
 https://www.arduino.cc/reference/en/libraries/adafruit-si4713-library/
 v1.0.0
 
-Sparkfun  Audio Bluetooth Breakout - RN-52
-https://www.sparkfun.com/products/retired/12849
-https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview
+## Hardware Details
+### Arduino Mega 2560 R3
+IPSUM LOREM
 
-## Power
+### Atmel-ICE Basic
+IPSUM LOREM
+
+### Sparkfun  Audio Bluetooth Breakout - RN-52
+#### Power
 First and foremost, the RN-52 is a 3.3V device.
 It can handle an input voltage of about 3.0 - 3.6V.
 Voltages above or below this range can result in the module not working properly or, worse, damaging the module.
@@ -59,7 +75,7 @@ This is useful in headset/hands-free applications where a battery is attached to
 
 Screenshot here
 
-## GPIO4
+#### GPIO4
 Restore Factory Defualts with GPIO4
 You should connect the GPIO4 pin to a switch, jumper, or resistor so it can be accessed.
 You can use this pin to reset the module to its factory default settings, which is critical in situations where the module has been mis-configured.
@@ -67,7 +83,7 @@ To reset the module to the factory defaults, GPIO4 should be high on power-up an
 
 Screenshot here
 
-## GPIO9
+#### GPIO9
 GPIO9 is used to tell the module to enter command mode.
 If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data.
 In order to enter command mode, GPIO9 must be pulled LOW.
@@ -76,14 +92,14 @@ In this example, a switch is used to easily enter and exit command mode.
 
 Screenshot here
 
-## UART
+#### UART
 You will need a way to communicate to the module and send commands.
 This will be accomplished with a 3.3V FTDI Basic. Connect GND to GND, TXO to UART_RX, and RXI to UART_TX.
 Those are the only connections needed to talk to the module.
 
 Screenshot here
 
-## Configure the Module
+#### Configure the Module
 Now that you can actually power up the RN-52 and send it into command mode, let's talk about changing the settings, and thus the behavior, of the Bluetooth module.
 
 Make sure the CMD Mode switch is in the OFF position (GPIO9 NOT shorted to GND).
@@ -95,3 +111,15 @@ With the terminal open and connected to the RN-52, flip the CMD Mode switch to t
 You should now see CMD appear in your terminal.
 
 IPSUM LOREM
+
+### Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713
+
+IPSUM LOREM
+
+### 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
+
+IPSUM LOREM
+
+
+
+
