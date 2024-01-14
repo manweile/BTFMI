@@ -10,25 +10,33 @@ For audio streaming from Android mobile to FM radio
 | --------- | --------- | --------- | ----------- |
 | Arduino Mega2560 R3 | 1 | add link here | add Part Number |
 | Atmel-ICE Basic     | 1 | add link here | add Part Number |
-| 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd | 1 | [2.8" TFT Touch Shield](https://www.adafruit.com/product/1947) | add Part Number |
-| Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713 | 1 | [Adafruit Stereo FM Tranmitter](https://www.adafruit.com/product/1958) | add Part Number |
-| Sparkfun  Audio Bluetooth Breakout - RN-52 | 1 | [Sparkfun Audio Bluetooth Breakout](https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview) | add Part Number |
+| 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd | 1 | [2.8" TFT Touch Shield](https://www.adafruit.com/product/1947) | 1947 |
+| Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713 | 1 | [Adafruit Stereo FM Tranmitter](https://www.adafruit.com/product/1958) | 1958 |
+| Sparkfun  Audio Bluetooth Breakout - RN-52 | 1 | [Sparkfun Audio Bluetooth Breakout](https://learn.sparkfun.com/tutorials/rn-52-bluetooth-hookup-guide#overview) | WRL-12849 |
+| Mini Pushbutton Switch | 7 | [Mini Pushbutton](https://www.sparkfun.com/products/97?_gl=1*36uoho*_ga*MTc1Mjg5MTM4NC4xNzAxMTA1MDY1*_ga_T369JS7J9N*MTcwNTE4NTg2My4xMS4wLjE3MDUxODU4NjMuNjAuMC4w&_ga=2.58816493.1571879566.1705185864-1752891384.1701105065) | COM-0097 |
+| Mini Power Switch - SPDT | 1 | [Mini Power Switch](https://www.sparkfun.com/products/102?_gl=1*1s0kwn0*_ga*MTc1Mjg5MTM4NC4xNzAxMTA1MDY1*_ga_T369JS7J9N*MTcwNTE4NTg2My4xMS4xLjE3MDUxODY2OTMuNjAuMC4w&_ga=2.103970880.1571879566.1705185864-1752891384.1701105065) | COM-00102 |
 
-## Required Libraries:
+**IMPORTANT ARDUINO IDE SETUP**
 
-### Arduino hardware libraries:
+[Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
+
+(use Arduino IDE tools>Board>Board Manager)
+
+## Required Arduino Libraries:
+
+### Pre-installed Arduino hardware libraries:
 
 [SPI](https://www.arduino.cc/reference/en/language/functions/communication/spi/)
 
 [Wire](https://www.arduino.cc/reference/en/language/functions/communication/wire/)
 
-### Third party function libraries:
+These libraries come installed with Arsuino IDE, so all you have to do is refrence them in code.
+```
+#include <SPI.h>
+#include <Wire.h>
+```
 
-**IMPORTANT**
-
-[Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
-
-(use Arduino IDE tools>Board>Board Manager)
+### Third party function libraries to install:
 
 [ArduinoSTL](https://www.arduino.cc/reference/en/libraries/arduinostl/)
 v1.1.0
@@ -38,7 +46,13 @@ v1.1.0
 
 [PrintEx](https://www.arduino.cc/reference/en/libraries/printex/) v1.2.0
 
-### Third party hardware & libraries:
+```
+#include <algorithm>
+#include <vector>
+#include <PrintEx.h>
+```
+
+### Third party hardware & libraries to install:
 
 [Adafruit_FT6206](https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/) v1.03
 
@@ -48,61 +62,98 @@ v1.1.0
 
 [Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713](https://www.arduino.cc/reference/en/libraries/adafruit-si4713-library/) v1.0.0
 
+```
+#include <Adafruit_GFX.h>
+#include <Adafruit_ILI9341.h>
+#include <Adafruit_FT6206.h>
+#include <Adafruit_Si4713.h>
+```
+
 ## Hardware Details
+
 ### Arduino Mega 2560 R3
+
 IPSUM LOREM
 
 ### Atmel-ICE Basic
+
 IPSUM LOREM
 
 ### Sparkfun  Audio Bluetooth Breakout - RN-52
+
 #### Power
-First and foremost, the RN-52 is a 3.3V device.
+**First and foremost, the RN-52 is a 3.3V device.**
 It can handle an input voltage of about 3.0 - 3.6V.
 Voltages above or below this range can result in the module not working properly or, worse, damaging the module.
 Make sure you select a power supply that can provide the correct amount of voltage to the device.
+
 As usual, connect the GND pin to GND, and connect the 3.3V pin to the Vcc pin on the supply.
 The PWR_EN pin can also be attached to a button to allow the user to power up the module when it is desired, even if power is already supplied.
-This is useful in headset/hands-free applications where a battery is attached to the module but the module doesn't need to be on all the time.
 
+This is useful in headset/hands-free applications where a battery is attached to the module but the module doesn't need to be on all the time.  
 Screenshot here
 
 #### GPIO4
+
 Restore Factory Defualts with GPIO4
+
 You should connect the GPIO4 pin to a switch, jumper, or resistor so it can be accessed.
 You can use this pin to reset the module to its factory default settings, which is critical in situations where the module has been mis-configured.
-To reset the module to the factory defaults, GPIO4 should be high on power-up and then toggle low, high, low, high with a 1 second wait between the transitions.
 
+To reset the module to the factory defaults, GPIO4 should be high on power-up and then *toggle low, high, low, high with a 1 second wait between the transitions.*  
 Screenshot here
 
 #### GPIO9
-GPIO9 is used to tell the module to enter command mode.
-If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data.
-In order to enter command mode, GPIO9 must be pulled LOW.
-This can be accomplished by simply connecting GPIO9 to GND with a jumper wire.
-In this example, a switch is used to easily enter and exit command mode.
 
+GPIO9 is used to tell the module to enter command mode.
+
+If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data.
+
+In order to enter command mode, GPIO9 must be pulled LOW.
+In this example, a switch is used to easily enter and exit command mode.  
 Screenshot here
 
 #### UART
 You will need a way to communicate to the module and send commands.
 This will be accomplished with a 3.3V FTDI Basic. Connect GND to GND, TXO to UART_RX, and RXI to UART_TX.
-Those are the only connections needed to talk to the module.
-
+Those are the only connections needed to talk to the module.  
 Screenshot here
 
+#### Install TeraTerm 
+
+- IPSUM LOREM Teraterm Install
+- IPSUM LOREM Teraterm Config
+
 #### Configure the Module
+
+Download and read the [Bluetooth Audio Module Command Reference User's Guide](https://cdn.sparkfun.com/assets/a/2/a/a/d/5217c61f757b7f55758b456f.pdf?_gl=1*122wpwx*_ga*MTc1Mjg5MTM4NC4xNzAxMTA1MDY1*_ga_T369JS7J9N*MTcwNTE4NTg2My4xMS4xLjE3MDUxODc4MTUuNjAuMC4w)
+
 Now that you can actually power up the RN-52 and send it into command mode, let's talk about changing the settings, and thus the behavior, of the Bluetooth module.
 
-Make sure the CMD Mode switch is in the OFF position (GPIO9 NOT shorted to GND).
-Turn on your RN-52.
-The two status LEDs should both stay solid for about 1 second and then begin flashing alternately.
-Your device is now ready to make a connection. Rather than connect over Bluetooth, the connection will be made over the serial UART.
-Open a terminal window on the port your RN-52 has been assigned (115200 Baud, 8,N,1).
-With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND).
-You should now see CMD appear in your terminal.
+1. Make sure the CMD Mode switch is in the OFF position (GPIO9 NOT shorted to GND).
+2. Turn on your RN-52.
+3. The two status LEDs should both stay solid for about 1 second and then begin flashing alternately.
+4. Your device is now ready to make a connection. Rather than connect over Bluetooth, the connection will be made over the serial UART.
+5. Open a terminal window on the port your RN-52 has been assigned (115200 Baud, 8,N,1).
+6. With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND).
+You should now see CMD appear in your terminal.  
+Screenshot here
 
-IPSUM LOREM
+7. Enable AVRCP  
+By default, the RN-52 does not have the AVRCP enabled. This is part of the extended features. When you type D to see the basic settings, you'll notice a line that says ExtFeatures=XX, where XX is some hex value.  
+screenshot here
+
+8. Notice that bit 0 is the bit we need to enable to activate the AVRCP button functionality. Send the command S%,07(/r) to enable this bit while leaving the other two bits enabled. Then follow it up with a reboot -- R,1(/r). You should now have AVRCP enabled. Type D to double check the settings.  
+screenshot here
+
+9. To exit command mode, simply flip the switch back to the OFF position. You will see END appear in the window.  
+screenshot here
+
+#### Connect and Play
+
+You are now ready to connect to your Bluetooth device and start streaming some music. Directions on how to pair and connect to the RN-52 can also be found in section 1.4 of the user guide.
+
+IPSUM LOREM from Secvtion 1.4
 
 ### Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713
 
