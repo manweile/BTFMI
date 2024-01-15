@@ -23,6 +23,10 @@ For audio streaming from Android mobile to FM radio
 | 68 kOhm resistor | 2 | [Resistor Kit](https://www.sparkfun.com/products/10969) | COM-10969 |
 | 18 kOhm resistor | 2 | [Resistor Kit](https://www.sparkfun.com/products/10969) |  COM-10969 |
 
+# Fritzing
+
+![Fritzing](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/Fritzing-full.png)
+
 **IMPORTANT ARDUINO IDE SETUP**
 
 [Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
