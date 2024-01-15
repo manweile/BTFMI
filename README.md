@@ -29,7 +29,7 @@ For audio streaming from Android mobile to FM radio
 
 # IMPORTANT ARDUINO IDE SETUP
 
-The Arduino AVR Board Library has a known bug in versions greater than 1.82: [Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
+The Arduino AVR Board Library has a known bug in versions greater than 1.82:  [Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
 
 To workaround, use Arduino IDE tools>Board>Board Manager to select Arduino AVR Boars. Select version 1.8.2 from drop down list.
 
