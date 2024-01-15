@@ -100,8 +100,12 @@ To hardware debug the Mega 2560 R3, 4 things are required:
 2. JTAG .5mm pitch 2x5 connection  
 Adafruit SWD (2x5 1.27mm) Cable Breakout Board ID: 2743  
 ![breakout board](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/2743-04.jpg)
-3. Atmel-ICE & cables
-4. Microchip Studio 7
+3. AVR ISP Breadboard Adapter Mini Kit ID: 1465  
+![isp adapter](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/1465-04.jpg)
+4. Atmel-ICE & cables  
+add screenshots here
+5. Microchip Studio 7  
+add link here
 
 IPSUM LOREM MS7 Mega 2560 ICSP upload details
 
