@@ -17,11 +17,11 @@ For audio streaming from Android mobile to FM radio
 | Mini Pushbutton Switch | 7 | [Mini Pushbutton](https://www.sparkfun.com/products/97?_gl=1*36uoho*_ga*MTc1Mjg5MTM4NC4xNzAxMTA1MDY1*_ga_T369JS7J9N*MTcwNTE4NTg2My4xMS4wLjE3MDUxODU4NjMuNjAuMC4w&_ga=2.58816493.1571879566.1705185864-1752891384.1701105065) | COM-0097 |
 | Mini Power Switch - SPDT | 1 | [Mini Power Switch](https://www.sparkfun.com/products/102?_gl=1*1s0kwn0*_ga*MTc1Mjg5MTM4NC4xNzAxMTA1MDY1*_ga_T369JS7J9N*MTcwNTE4NTg2My4xMS4xLjE3MDUxODY2OTMuNjAuMC4w&_ga=2.103970880.1571879566.1705185864-1752891384.1701105065) | COM-00102 |
 | USB Mini-B Cable | 1 | [Sparkfun USB Minio-B Cable](https://www.sparkfun.com/products/11301?_gl=1*6zq9iw*_ga*MTc1Mjg5MTM4NC4xNzAxMTA1MDY1*_ga_T369JS7J9N*MTcwNTI3MzMxNC4xNC4xLjE3MDUyNzM4MTQuNjAuMC4w&_ga=2.170488672.1571879566.1705185864-1752891384.1701105065) | CAB-11301 |
-| Adafruit Perma-Proto 1/2 Sized Breadboard | 2 | add link | add part number |
-| Adafruit Perma-Proto 1/4 Sized Breadboard | 1 | add link | add part number |
-| 10 uF Polarized Capacitor | 2 | add link | add part number |
-| 68 kOhm resistor | 2 | add link | add part number |
-| 18 kOhm resistor | 2 | add link | add part number |
+| Adafruit Perma-Proto 1/2 Sized Breadboard | 2 | [Adafruit Perma-Proto 1/2 Sized Breadboard](https://www.adafruit.com/product/571) | 571 |
+| Adafruit Perma-Proto 1/4 Sized Breadboard | 1 | [Adafruit Perma-Proto 1/4 Sized Breadboard](https://www.adafruit.com/product/589) | 589 |
+| 10 uF Polarized Capacitor | 2 | [Electrolytic Decoupling Capacitors](https://www.sparkfun.com/products/523) | COM-00523 |
+| 68 kOhm resistor | 2 | [Resistor Kit](https://www.sparkfun.com/products/10969) | COM-10969 |
+| 18 kOhm resistor | 2 | [Resistor Kit](https://www.sparkfun.com/products/10969) |  COM-10969 |
 
 **IMPORTANT ARDUINO IDE SETUP**
 
