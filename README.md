@@ -27,11 +27,13 @@ For audio streaming from Android mobile to FM radio
 
 ![Fritzing](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/Fritzing-full.png)
 
-**IMPORTANT ARDUINO IDE SETUP**
+# IMPORTANT ARDUINO IDE SETUP
 
-[Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
+The Arduino AVR Board Library has a known bug in versions greater than 1.82: [Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
 
-(use Arduino IDE tools>Board>Board Manager)
+To workaround, use Arduino IDE tools>Board>Board Manager to select Arduino AVR Boars. Select version 1.8.2 from drop down list.
+
+**DO NOT UPDATE THIS BOARD WHEN YOU OPEN THE IDE AND GET UPDATE INFO DIALOG BOX**
 
 # Required Arduino Libraries:
 
@@ -49,13 +51,14 @@ These libraries come installed with Arduino IDE, so all you have to do is refren
 
 ## Third party function libraries to install:
 
-[ArduinoSTL](https://www.arduino.cc/reference/en/libraries/arduinostl/)
+[ArduinoSTL](https://www.arduino.cc/reference/en/libraries/arduinostl/)  
 v1.1.0
 
 1. algorithm
 2. vector
 
-[PrintEx](https://www.arduino.cc/reference/en/libraries/printex/) v1.2.0
+[PrintEx](https://www.arduino.cc/reference/en/libraries/printex/)  
+v1.2.0
 
 ```
 #include <algorithm>
@@ -65,13 +68,17 @@ v1.1.0
 
 ## Third party hardware & libraries to install:
 
-[Adafruit_FT6206](https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/) v1.03
+[Adafruit_FT6206](https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/)  
+v1.03
 
-[Adafruit_GFX](https://www.arduino.cc/reference/en/libraries/adafruit-gfx-library/) v1.5.7
+[Adafruit_GFX](https://www.arduino.cc/reference/en/libraries/adafruit-gfx-library/)  
+v1.5.7
 
-[Adafruit_ILI9341](https://www.arduino.cc/reference/en/libraries/adafruit-ili9341/) v1.5.1
+[Adafruit_ILI9341](https://www.arduino.cc/reference/en/libraries/adafruit-ili9341/)  
+v1.5.1
 
-[Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713](https://www.arduino.cc/reference/en/libraries/adafruit-si4713-library/) v1.0.0
+[Adafruit Stereo FM Tranmitter with RDS/RDBS Breakout - Si4713](https://www.arduino.cc/reference/en/libraries/adafruit-si4713-library/)  
+v1.0.0
 
 ```
 #include <Adafruit_GFX.h>
@@ -92,10 +99,12 @@ screenshot here
 2. JTAG .5mm pitch 2x5 connection  
 Adafruit SWD (2x5 1.27mm) Cable Breakout Board ID: 2743  
 screenshot here
-3. Atmel-ICE
+3. Atmel-ICE & cables
 4. Microchip Studio 7
 
-IPSUM LOREM
+IPSUM LOREM MS7 Mega 2560 ICSP upload details
+
+IPSUM LOREM MS7 Mega 2560 JTAG debugging details
 
 ### Atmel-ICE Basic
 
