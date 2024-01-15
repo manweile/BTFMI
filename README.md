@@ -35,9 +35,9 @@ To workaround, use Arduino IDE tools>Board>Board Manager to select Arduino AVR B
 
 **DO NOT UPDATE THIS BOARD WHEN YOU OPEN THE IDE AND GET UPDATE INFO DIALOG BOX**
 
-# Required Arduino Libraries:
+# Required Arduino Libraries
 
-## Pre-installed Arduino hardware libraries:
+## Pre-installed Arduino hardware libraries
 
 [SPI](https://www.arduino.cc/reference/en/language/functions/communication/spi/)
 
@@ -49,7 +49,7 @@ These libraries come installed with Arduino IDE, so all you have to do is refren
 #include <Wire.h>
 ```
 
-## Third party function libraries to install:
+## Third party function libraries to install
 
 [ArduinoSTL](https://www.arduino.cc/reference/en/libraries/arduinostl/)  
 v1.1.0
@@ -66,7 +66,7 @@ v1.2.0
 #include <PrintEx.h>
 ```
 
-## Third party hardware & libraries to install:
+## Third party hardware & libraries to install
 
 [Adafruit_FT6206](https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/)  
 v1.03
@@ -95,7 +95,8 @@ v1.0.0
 
 To hardware debug the Mega 2560 R3, 4 things are required:
 1. Cut the reset-en pads  
-![reset-en](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/reset_en1.jpg)
+![reset-en](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/reset_en1.jpg)  
+***CUTTING THE reset-en pads REQUIRES USING HARDWARE PROGRAMMING***
 
 2. JTAG .5mm pitch 2x5 connection  
 Adafruit SWD (2x5 1.27mm) Cable Breakout Board ID: 2743  
@@ -143,19 +144,16 @@ GPIO9 is used to tell the module to enter command mode.
 
 If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data.
 
-In order to enter command mode, GPIO9 must be pulled LOW.
-In this example, a switch is used to easily enter and exit command mode.  
-Screenshot here
+In order to enter command mode, GPIO9 must be pulled LOW (to GND). Refer to fritzing diagram.
+
 
 ### UART
-You will need a way to communicate to the module and send commands.
-This will be accomplished with a 3.3V FTDI Basic. Connect GND to GND, TXO to UART_RX, and RXI to UART_TX.
-Those are the only connections needed to talk to the module.
+You will need a way to communicate to the module and send commands. This will be accomplished with a 3.3V FTDI Basic.
 
-**Discovering your device**
+#### Discovering your device
+
 1. Connect FTDI to your computer with usb mini-b cable  
-*If this is the first time you've plugged in a device of this nature into your computer, you may need to install the drivers.*  
-Follow this guide: [FTDI Driver Inatallation Guide](https://learn.sparkfun.com/tutorials/how-to-install-ftdi-drivers/all)
+*If this is the first time you've plugged in a device of this nature into your computer, you may need to install the drivers. Follow this guide: [FTDI Driver Inatallation Guide](https://learn.sparkfun.com/tutorials/how-to-install-ftdi-drivers/all)*
 2. Open Windows Device Manager
 3. Once you've got Device Manger open, expand the Ports tab
 4. You should see "USB Serial Port (COM 9)"
@@ -167,10 +165,10 @@ Follow this guide: [FTDI Driver Inatallation Guide](https://learn.sparkfun.com/t
 *If you do have multiple devices and are not sure which device is the one you just plugged in, unplug it, watch for whichever COM port disappears, and then plug it back in. The COM port should reappear letting you know that's the device you're looking for.*
 
 #### TeraTerm
+
 Download: [Teraterm Project](https://github.com/TeraTermProject/teraterm/releases)
 
-#### Configure Teraterm
-[Teraterm Config](https://learn.sparkfun.com/tutorials/terminal-basics/all)
+Once you have Tera Term installed, open up it up.
 
 **Making a Connection**
 
@@ -201,13 +199,12 @@ Download and read the [Bluetooth Audio Module Command Reference User's Guide](ht
 
 Now that you can actually power up the RN-52 and send it into command mode, let's talk about changing the settings, and thus the behavior, of the Bluetooth module.
 
-1. Make sure the CMD Mode switch is in the OFF position (GPIO9 NOT shorted to GND).
+1. Make sure the CMD Mode switch is in the OFF position (GPIO9 NOT shorted to GND - refer to fritzing diagram).
 2. Turn on your RN-52.
 3. The two status LEDs should both stay solid for about 1 second and then begin flashing alternately.
 4. Your device is now ready to make a connection. Rather than connect over Bluetooth, the connection will be made over the serial UART.
-5. Open a terminal window on the port (COM 9) your RN-52 has been assigned (115200 Baud, 8,N,1).
-6. With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND).
-You should now see CMD appear in your terminal.
+5. Open a Teraterm terminal window on the port (COM 9) your RN-52 has been assigned (115200 Baud, 8,N,1).
+6. With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND). You should now see CMD appear in your terminal.
 
 7. Enable AVRCP  
 By default, the RN-52 does not have the AVRCP enabled. This is part of the extended features. When you type D to see the basic settings, you'll notice a line that says ExtFeatures=XX, where XX is some hex value.
@@ -215,6 +212,7 @@ By default, the RN-52 does not have the AVRCP enabled. This is part of the exten
 8. Notice that bit 0 is the bit we need to enable to activate the AVRCP button functionality. Send the command S%,07(/r) to enable this bit while leaving the other two bits enabled. Then follow it up with a reboot -- R,1(/r). You should now have AVRCP enabled. Type D to double check the settings.
 
 9. To exit command mode, simply flip the switch back to the OFF position. You will see END appear in the window.
+10. Close Teraterm.
 
 #### Connect and Play
 
