@@ -117,6 +117,11 @@ IPSUM LOREM MS7 Mega 2560 JTAG debugging details
 
 IPSUM LOREM
 
+# Speaker Level to Line Level
+The RN-52 audio output circuitry consists of a differential speaker output preceded by a gain stage and a class AB amplifier. The output voltage full scale swing (differential) is 750mV. 
+The Si4713 can take a max of 636 mV on line level inputs (this is defualt setting).
+
+The RN-52 outputs speaker level 
 ## Sparkfun  Audio Bluetooth Breakout - RN-52
 
 ### Power
