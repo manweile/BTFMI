@@ -160,7 +160,7 @@ void setup() {
 	//tft.fillScreen(ILI9341_BLACK);
 	// origin = left,top landscape (USB left upper)
 	//tft.setRotation(1);
-	redBtn();
+	// redBtn();
 }
 
 void loop() {
@@ -178,24 +178,24 @@ void loop() {
 		int y = tft.height() - p.x;
 		int x = p.y;
 
-		if (recordOn)
-		{
-			if((x > REDBUTTON_X) && (x < (REDBUTTON_X + REDBUTTON_W))) {
-				if ((y > REDBUTTON_Y) && (y <= (REDBUTTON_Y + REDBUTTON_H))) {
-					//Serial.print("Red btn hit\n");
-					redBtn();
-				}
-			}
-		}
-		else //Record is off (recordOn == false)
-		{
-			if((x > GREENBUTTON_X) && (x < (GREENBUTTON_X + GREENBUTTON_W))) {
-				if ((y > GREENBUTTON_Y) && (y <= (GREENBUTTON_Y + GREENBUTTON_H))) {
-					//Serial.print("Green btn hit\n");
-					greenBtn();
-				}
-			}
-		}
+		//if (recordOn)
+		//{
+			//if((x > REDBUTTON_X) && (x < (REDBUTTON_X + REDBUTTON_W))) {
+				//if ((y > REDBUTTON_Y) && (y <= (REDBUTTON_Y + REDBUTTON_H))) {
+					////Serial.print("Red btn hit\n");
+					//redBtn();
+				//}
+			//}
+		//}
+		//else //Record is off (recordOn == false)
+		//{
+			//if((x > GREENBUTTON_X) && (x < (GREENBUTTON_X + GREENBUTTON_W))) {
+				//if ((y > GREENBUTTON_Y) && (y <= (GREENBUTTON_Y + GREENBUTTON_H))) {
+					////Serial.print("Green btn hit\n");
+					//greenBtn();
+				//}
+			//}
+		//}
 	}
 
 	// @TODO I want to see current antenna capacitance
