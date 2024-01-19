@@ -32,7 +32,7 @@ For audio streaming from Android mobile to FM radio
 The Arduino AVR Board Library has a known bug in versions greater than 1.82:  
 [Downgrade Arduino AVR Boards to 1.82](https://github.com/LubomirJagos/LabVIEW-Universal-Transcriptor/issues/3)
 
-To workaround, use Arduino IDE tools>Board>Board Manager to select Arduino AVR Boars. Select version 1.8.2 from drop down list. **DO NOT UPDATE THIS BOARD WHEN YOU OPEN THE IDE AND GET UPDATE INFO DIALOG BOX**
+To workaround, use Arduino IDE tools>Board>Board Manager to select Arduino AVR Boards. Select version 1.8.2 from drop down list. **DO NOT UPDATE THIS BOARD WHEN YOU OPEN THE IDE AND GET UPDATE INFO DIALOG BOX**
 
 ## Required Arduino Libraries
 
@@ -103,17 +103,22 @@ Adafruit SWD (2x5 1.27mm) Cable Breakout Board ID: 2743
 3. AVR ISP Breadboard Adapter Mini Kit ID: 1465  
 ![isp adapter](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/1465-04.jpg)
 4. Atmel-ICE & cables  
+add link  
 add screenshots here
 5. Microchip Studio 7  
 add link here
+6. Visual Micro  
+add link here
+
+### Atmel-ICE Basic
+
+Atmel-ICE is a hardware programmer/debugger.
+
+IPSUM LOREM
 
 IPSUM LOREM MS7 Mega 2560 ICSP upload details
 
 IPSUM LOREM MS7 Mega 2560 JTAG debugging details
-
-### Atmel-ICE Basic
-
-IPSUM LOREM
 
 ### Speaker Level to Line Level
 
@@ -125,7 +130,11 @@ The overall gain of the speaker output is approximately -21 dB to 0 dB in 1.5 dB
 
 The Si4713 can take a max of 636 mV on line level inputs (this is default setting).
 
-The RN-52 outputs speaker level
+The RN-52 output speaker level needs to be attenuated from 750 mV to less than 636 mV.
+
+schematic or fritzing diagram here
+
+IPSUM LOREM attenuation circuit description
 
 ### Sparkfun  Audio Bluetooth Breakout - RN-52
 
