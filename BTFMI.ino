@@ -44,8 +44,9 @@
 #define BROADCAST_LEVEL 60		// noise level for broadcasting stations
 
 //fm debugging flags
-#define USE_AVAILABLE false
-#define SHOW_SCANNED false
+#define USE_AVAILABLE true
+#define SHOW_SCANNED true
+#define DEBUG_ON false
 
 //capacitive touch definitions
 #define SD_CS 4
@@ -73,10 +74,13 @@ Adafruit_FT6206 ts = Adafruit_FT6206();
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 boolean recordOn = false;
+uint16_t prevFreq;
+uint8_t prevdBuV, prevAntCap, prevNoiseLevel, prevASQ;
+int8_t prevInLevel;
 
 void setup() {
 	int freq;
-	int station;
+	int station = FMSTATION;
 
 	Serial.begin(BAUD);
 
@@ -98,6 +102,7 @@ void setup() {
 		tft.setTextSize(3);
 
 		// now we can use tft.print and println
+		Serial.println("GAM Radio");
 		tft.println("GAM Radio");
 	}
 
@@ -106,53 +111,98 @@ void setup() {
 
 	// begin with address 0x63 (CS high default)
 	if (! radio.begin()) {
+		Serial.print("Couldn't find Si4713 transceiver");
 		tft.println("Couldn't find Si4713 transceiver");
 		delay(500);
 		exit(2);
 	}
 
+	Serial.println("Scanning for broadcasting stations ...");
 	tft.println("Scanning for broadcasting stations ...");
+	Serial.println();
 	tft.println();
 
 	for (freq = MIN_FREQ; freq <= MAX_FREQ; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
 		if( radio.currNoiseLevel >= BROADCAST_LEVEL) {
-			// @TODO use PrintEx.h?
+			Serial.print("Broadcast at "); Serial.print(freq/100.00); Serial.print(" Mhz, Current Noise Level: "); Serial.print(radio.currNoiseLevel);
 			tft.print("Broadcast at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
+			Serial.println();
 			tft.println();
 		}
 	}
 
-	// station = availableChannels(BROADCAST_LEVEL, FMSTATION, MIN_FREQ, MAX_FREQ, SHOW_SCANNED);
-
-	// @TODO use PrintEx.h?
-	tft.print("\nSet TX power: "); tft.print(TX_POWER); tft.print(" dBuV");
-	radio.setTXpower(TX_POWER);
-
-	// @TODO use PrintEx.h?
+	//
 	if(USE_AVAILABLE) {
 		station = availableChannels(BROADCAST_LEVEL, FMSTATION, MIN_FREQ, MAX_FREQ, SHOW_SCANNED);
-		//Serial.println("\nTuning into frequency "); Serial.print(station/100.00); Serial.println(" Mhz\n");
+
+		Serial.print("\nTuning into frequency "); Serial.print(station/100.00); Serial.print(" Mhz");
+		Serial.println();
+
 		tft.print("\nTuning into frequency "); tft.print(station/100.00); tft.print(" Mhz");
 		tft.println();
-		radio.tuneFM(station);
 	}
 	else {
-		//Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.println(" Mhz\n");
+		Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.print(" Mhz");
+		Serial.println();
+
 		tft.print("\nTuning into debugging frequency "); tft.print(FMSTATION/100.00); tft.print(" Mhz");
 		tft.println();
-		radio.tuneFM(FMSTATION);
 	}
 
+	/*
+	one of readTuneMeasure(freq) or readTuneStatus() in avalaibleChannels
+	is resetting transmission power to zero
+	so have to call setTxPower after avalaibleChannels called
+	suspect its readTuneMeasure because:
+	void Adafruit_Si4713::readTuneMeasure(uint16_t freq) {
+		// check freq is multiple of 50khz
+		if (freq % 5 != 0) {
+			freq -= (freq % 5);
+		}
+		//Serial.print("Measuring "); Serial.println(freq);
+		_i2ccommand[0] = SI4710_CMD_TX_TUNE_MEASURE;
+		_i2ccommand[1] = 0;
+		_i2ccommand[2] = freq >> 8;
+		_i2ccommand[3] = freq;
+		_i2ccommand[4] = 0;
+
+		sendCommand(5);
+		while (getStatus() != 0x81) delay(10);
+	}
+	_i2ccommand[4], which is antenna capacitance, is being reset to zero
+	*/
+	radio.setTXpower(TX_POWER);
+
+	radio.tuneFM(station);
+
+	Serial.print("Setting TX power: "); Serial.print(TX_POWER); Serial.print(" dBuV");
+	Serial.println();
+	tft.print("Setting TX power: "); tft.print(TX_POWER); tft.print(" dBuV");
+	tft.println();
+
 	// This will tell you the status in case you want to read it from the chip
-	// @TODO use PrintEx.h?
 	radio.readTuneStatus();
 
-	tft.print("\nCurr frequency: "); tft.print(radio.currFreq/100.00);
-	tft.print("\nCurr frequency dBuV: "); tft.print(radio.currdBuV);
-	tft.print("\nCurr ANT capacitance: "); tft.print(radio.currAntCap);
+	Serial.print("\nFrequency: "); Serial.print(radio.currFreq/100.00);
+	tft.print("\nFrequency: "); tft.print(radio.currFreq/100.00);
+
+	Serial.print("\nFrequency dBuV: "); Serial.print(radio.currdBuV);
+	tft.print("\nFrequency dBuV: "); tft.print(radio.currdBuV);
+
+	Serial.print("\nANT capacitance: "); Serial.print(radio.currAntCap);
+	Serial.println("\n");
+	tft.print("\nANT capacitance: "); tft.print(radio.currAntCap);
 	tft.println();
+
+	prevFreq = radio.currFreq/100.00;
+	prevdBuV = radio.currdBuV;
+	prevAntCap = radio.currAntCap;
+
+	radio.readASQ();
+	prevASQ = radio.currASQ;
+	prevInLevel = radio.currInLevel;
 
 	// set GP1 and GP2 to output
 	//radio.setGPIOctrl(_BV(1) | _BV(2));
@@ -164,15 +214,13 @@ void setup() {
 }
 
 void loop() {
-	// @TODO use PrintEx.h?
-
 	// cap screen
 	if (ts.touched())
 	{
 		// Retrieve a point
 		TS_Point p = ts.getPoint();
-		// rotate coordinate system
-		// flip it around to match the screen.
+
+		// rotate coordinate system & flip it around to match the screen.
 		p.x = map(p.x, 0, 240, 240, 0);
 		p.y = map(p.y, 0, 320, 320, 0);
 		int y = tft.height() - p.x;
@@ -198,14 +246,27 @@ void loop() {
 		//}
 	}
 
-	// @TODO I want to see current antenna capacitance
+
 	radio.readTuneStatus();
-	// @TODO I only want to see CHANGES in antenna capacitance
-	Serial.print("Curr ANT capacitance: \t"); Serial.print(radio.currAntCap);
+	// I only want to see CHANGES in antenna capacitance and only for debugging purposes
+	if( radio.currAntCap != prevAntCap ) {
+		Serial.print("Curr ANT capacitance: "); Serial.print(radio.currAntCap);
+		Serial.println();
+		prevAntCap = radio.currAntCap;
+	}
 
 	radio.readASQ();
-	// @TODO I only want to see CHANGES in ASQ and InLevel
-    Serial.print("\tCurr ASQ:\t 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel:\t"); Serial.println(radio.currInLevel);
+	// I only want to see CHANGES in ASQ and InLevel and only for debugging purposes
+	if( radio.currASQ != prevASQ ) {
+		Serial.print("Curr ASQ: 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel: "); Serial.println(radio.currInLevel);
+		prevASQ = radio.currASQ;
+	}
+
+	// currInLevel changes to much by too little, so need a floor delta value
+	if( abs(radio.currInLevel - prevInLevel) > 10 ) {
+		Serial.print("Curr ASQ: 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel: "); Serial.println(radio.currInLevel);
+		prevInLevel = radio.currInLevel;
+	}
 
 	// @TODO if ASQ over modulating (confirm this value in docs), reduce rn-52 output volume 1 step and print to screen
 	// @TODO if ASQ is not over modulating, increase rn-52 output volume 1 step and print to screen
@@ -248,15 +309,17 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = defBroadcast;
 
 	//scan the fm band from loEnd to hiEnd in .2 Mhz increments, save frequencies with low enough noise level
-	printf("\nScanning for available frequencies ...\n\n");
+	//printf("\nScanning for available frequencies ...\n\n");
+	Serial.print("\nScanning for available frequencies ...\n");
+	tft.print("\nScanning for available frequencies ...\n");
 	for (freq = loEnd; freq <= hiEnd; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
 
 		if( radio.currNoiseLevel < maxLevel) {
-			// @TODO use PrintEx.h?
 			if (showInfo){
-				Serial.print("Measuring available frequency "); Serial.print(freq/100.00); Serial.print(" Mhz with Current Noise Level: "); Serial.println(radio.currNoiseLevel);
+				// Serial print cause I don't want to clutter up tft screen
+				Serial.print("Available frequency "); Serial.print(freq/100.00); Serial.print(" Mhz, Noise Level: "); Serial.println(radio.currNoiseLevel);
 			}
 			scannedFreqs.push_back(std::make_pair(freq, radio.currNoiseLevel));
 		}
@@ -264,24 +327,31 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 
 	// sort by low noise level ascending, take lowest noise level as new broadcast frequency
 	sort(scannedFreqs.begin(), scannedFreqs.end(), sort_pred());
+	newBroadcast = scannedFreqs[0].first;
 
-	//Serial.print("\nSorted available frequencies\n\n");
-	printf("\nSorted available frequencies\n\n");
-	for(int i = 0; i < scannedFreqs.size(); i++) {
+	//printf("\nSorted available frequencies\n\n");
+	Serial.print("\nSorted available frequencies\n");
+	//for(int i = 0; i < scannedFreqs.size(); i++) {
+	for(int i = scannedFreqs.size() -1; i >= 0; i--) {
 		if(showInfo){
-			// @TODO use PrintEx.h?
-			Serial.print("Frequency "); Serial.print(scannedFreqs[i].first/100.00); Serial.print(" Mhz, with noise: "); Serial.print(scannedFreqs[i].second); Serial.print("\n");
+			//  Serial print cause I don't want to clutter up tft screen
+			Serial.print("Frequency "); Serial.print(scannedFreqs[i].first/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[i].second); Serial.print("\n");
 		}
 	}
 
-	newBroadcast = scannedFreqs[0].first;
+	// display new frequency
+	//printf("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
+	Serial.print("\nFound "); Serial.print(scannedFreqs.size()); Serial.print(" frequencies with noise less than "); Serial.print(maxLevel);
+	Serial.println();
+	tft.print("\nFound "); tft.print(scannedFreqs.size()); tft.print(" frequencies with noise less than "); tft.print(maxLevel);
+	tft.println();
 
-	//display new frequency
-	printf("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
-	// @TODO use PrintEx.h?
-	Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz with Current Noise Level: "); Serial.println(scannedFreqs[0].second);
+	Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[0].second);
+	Serial.println();
+	tft.print("Quietest frequency: "); tft.print(newBroadcast/100.00); tft.print(" Mhz, Noise Level: "); tft.print(scannedFreqs[0].second);
+	tft.println();
 
-	// save new broadcast frequency to either eeprom (preferable) or sd and return it
+	// @TODO save new broadcast frequency to either eeprom (preferable) or sd
 
 	return newBroadcast;
 }
