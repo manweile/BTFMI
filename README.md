@@ -128,9 +128,13 @@ The output voltage full scale swing (differential) is 750mV.
 The speaker output is capable of driving a speaker with an impedance of at least 8 ohms directly.  
 The overall gain of the speaker output is approximately -21 dB to 0 dB in 1.5 dB steps.  
 
+The Si4713 has LIN/RIN unbalanced line level analog inputs, which can be fed directly to the pins or via the 3.5 mm jack.  
 The Si4713 can take a max of 636 mV on line level inputs (this is default setting).
 
-The RN-52 output speaker level needs to be attenuated from 750 mV to less than 636 mV.
+The RN-52 output speaker level needs to be:
+
+1. summed from balanced to unbalanced
+2. attenuated from 750 mV to less than 636 mV.
 
 schematic or fritzing diagram here
 
