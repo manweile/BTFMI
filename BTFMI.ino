@@ -44,7 +44,7 @@
 #define BROADCAST_LEVEL 60		// noise level for broadcasting stations
 
 //fm debugging flags
-#define USE_AVAILABLE true
+#define USE_AVAILABLE false
 #define SHOW_SCANNED true
 #define DEBUG_ON false
 
@@ -118,8 +118,9 @@ void setup() {
 	}
 
 	Serial.println("Scanning for broadcasting stations ...");
-	tft.println("Scanning for broadcasting stations ...");
 	Serial.println();
+
+	tft.println("Scanning for broadcasting stations ...");
 	tft.println();
 
 	for (freq = MIN_FREQ; freq <= MAX_FREQ; freq += 20) {
@@ -127,8 +128,8 @@ void setup() {
 		radio.readTuneStatus();
 		if( radio.currNoiseLevel >= BROADCAST_LEVEL) {
 			Serial.print("Broadcast at "); Serial.print(freq/100.00); Serial.print(" Mhz, Current Noise Level: "); Serial.print(radio.currNoiseLevel);
-			tft.print("Broadcast at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
 			Serial.println();
+			tft.print("Broadcast at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
 			tft.println();
 		}
 	}
@@ -139,14 +140,12 @@ void setup() {
 
 		Serial.print("\nTuning into frequency "); Serial.print(station/100.00); Serial.print(" Mhz");
 		Serial.println();
-
 		tft.print("\nTuning into frequency "); tft.print(station/100.00); tft.print(" Mhz");
 		tft.println();
 	}
 	else {
 		Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.print(" Mhz");
 		Serial.println();
-
 		tft.print("\nTuning into debugging frequency "); tft.print(FMSTATION/100.00); tft.print(" Mhz");
 		tft.println();
 	}
@@ -173,6 +172,7 @@ void setup() {
 	}
 	_i2ccommand[4], which is antenna capacitance, is being reset to zero
 	*/
+
 	radio.setTXpower(TX_POWER);
 
 	radio.tuneFM(station);
@@ -214,7 +214,7 @@ void setup() {
 }
 
 void loop() {
-	// cap screen
+	// react to cap screen use input actions
 	if (ts.touched())
 	{
 		// Retrieve a point
@@ -258,19 +258,22 @@ void loop() {
 	radio.readASQ();
 	// I only want to see CHANGES in ASQ and InLevel and only for debugging purposes
 	if( radio.currASQ != prevASQ ) {
-		Serial.print("Curr ASQ: 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel: "); Serial.println(radio.currInLevel);
+		Serial.print("Curr ASQ: 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel: "); Serial.print(radio.currInLevel);
+		Serial.println();
 		prevASQ = radio.currASQ;
 	}
 
-	// currInLevel changes to much by too little, so need a floor delta value
+	// currInLevel changes too often by too little, so need a floor delta value
 	if( abs(radio.currInLevel - prevInLevel) > 10 ) {
-		Serial.print("Curr ASQ: 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel: "); Serial.println(radio.currInLevel);
+		Serial.print("Curr ASQ: 0x"); Serial.print(radio.currASQ, HEX); Serial.print("\tCurr InLevel: "); Serial.print(radio.currInLevel);
+		Serial.println();
 		prevInLevel = radio.currInLevel;
 	}
 
 	// @TODO if ASQ over modulating (confirm this value in docs), reduce rn-52 output volume 1 step and print to screen
 	// @TODO if ASQ is not over modulating, increase rn-52 output volume 1 step and print to screen
 
+	// @TODO what is this code for???
 	// toggle GPO1 and GPO2
 	//radio.setGPIO(_BV(1));
 	//delay(500);
@@ -309,17 +312,19 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = defBroadcast;
 
 	//scan the fm band from loEnd to hiEnd in .2 Mhz increments, save frequencies with low enough noise level
-	//printf("\nScanning for available frequencies ...\n\n");
-	Serial.print("\nScanning for available frequencies ...\n");
-	tft.print("\nScanning for available frequencies ...\n");
+	Serial.print("\nScanning for available frequencies ...");
+	Serial.println();
+	tft.print("\nScanning for available frequencies ...");
+	tft.println();
 	for (freq = loEnd; freq <= hiEnd; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
 
 		if( radio.currNoiseLevel < maxLevel) {
 			if (showInfo){
-				// Serial print cause I don't want to clutter up tft screen
-				Serial.print("Available frequency "); Serial.print(freq/100.00); Serial.print(" Mhz, Noise Level: "); Serial.println(radio.currNoiseLevel);
+				// Serial print only cause I don't want to clutter up tft screen
+				Serial.print("Available frequency "); Serial.print(freq/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(radio.currNoiseLevel);
+				Serial.println();
 			}
 			scannedFreqs.push_back(std::make_pair(freq, radio.currNoiseLevel));
 		}
@@ -329,18 +334,17 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	sort(scannedFreqs.begin(), scannedFreqs.end(), sort_pred());
 	newBroadcast = scannedFreqs[0].first;
 
-	//printf("\nSorted available frequencies\n\n");
 	Serial.print("\nSorted available frequencies\n");
-	//for(int i = 0; i < scannedFreqs.size(); i++) {
+	// reverse print the sorted scanned frequencies because I want the quietest frequency to be last datum printed
 	for(int i = scannedFreqs.size() -1; i >= 0; i--) {
 		if(showInfo){
-			//  Serial print cause I don't want to clutter up tft screen
-			Serial.print("Frequency "); Serial.print(scannedFreqs[i].first/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[i].second); Serial.print("\n");
+			//  Serial print only cause I don't want to clutter up tft screen
+			Serial.print("Frequency "); Serial.print(scannedFreqs[i].first/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[i].second);
+			Serial.println();
 		}
 	}
 
 	// display new frequency
-	//printf("\nFound %d frequencies with noise less than %d\n", scannedFreqs.size(), maxLevel);
 	Serial.print("\nFound "); Serial.print(scannedFreqs.size()); Serial.print(" frequencies with noise less than "); Serial.print(maxLevel);
 	Serial.println();
 	tft.print("\nFound "); tft.print(scannedFreqs.size()); tft.print(" frequencies with noise less than "); tft.print(maxLevel);
@@ -351,7 +355,7 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	tft.print("Quietest frequency: "); tft.print(newBroadcast/100.00); tft.print(" Mhz, Noise Level: "); tft.print(scannedFreqs[0].second);
 	tft.println();
 
-	// @TODO save new broadcast frequency to either eeprom (preferable) or sd
+	// @TODO save new broadcast frequency to either eeprom (preferable) or sd??
 
 	return newBroadcast;
 }
@@ -365,6 +369,8 @@ void drawFrame()
 	tft.drawRect(FRAME_X, FRAME_Y, FRAME_W, FRAME_H, ILI9341_BLACK);
 }
 
+
+// @TODO function header
 void redBtn()
 {
 	tft.fillRect(REDBUTTON_X, REDBUTTON_Y, REDBUTTON_W, REDBUTTON_H, ILI9341_RED);
@@ -377,6 +383,7 @@ void redBtn()
 	recordOn = false;
 }
 
+// @TODO function header
 void greenBtn()
 {
 	tft.fillRect(GREENBUTTON_X, GREENBUTTON_Y, GREENBUTTON_W, GREENBUTTON_H, ILI9341_GREEN);
@@ -390,17 +397,33 @@ void greenBtn()
 }
 
 /**
-* Prints text to touch screen
-* @param{String} inputText the text to print to screen
+* Prints supplied text to touch screen
+* The input string is expected to be fully formatted by calling function
+* Ie. the input string contains all desired tabs, newlines, etc.
+* Eg.
+* Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[0].second);
+* Serial.println();
+* is expected to be:
+* String msg = "Quietest frequency: " + atoi??(newBroadcast/100.00) + " Mhz, Noise Level: " + atoi??(scannedFreqs[0].second) + "\n";
+* @param{String} inputText the text to print
 */
-void printText(String inputText)
+void tftPrint(String inputText)
 {
-	//set cursor position
+	tft.print(inputText);
+}
 
-	//set text color
-
-	// set text size
-
-	// print the input text
-
+/**
+* Prints text to Serial monitor
+* The input string is expected to be fully formatted by calling function
+* Ie. the input string contains all desired tabs, newlines, etc.
+* Eg.
+* Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[0].second);
+* Serial.println();
+* is expected to be:
+* String msg = "Quietest frequency: " + atoi??(newBroadcast/100.00) + " Mhz, Noise Level: " + atoi??(scannedFreqs[0].second) + "\n";
+* @param(String) inputText the text to print
+*/
+void serialPrint(String inputText)
+{
+	Serial.print(inputText);
 }
