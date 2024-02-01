@@ -96,10 +96,11 @@ To hardware debug the Mega 2560 R3, 4 things are required:
 1. Cut the reset-en pads  
 ![reset-en](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/reset_en1.jpg)  
 ***CUTTING THE reset-en pads REQUIRES USING HARDWARE PROGRAMMING***
-
 2. JTAG .5mm pitch 2x5 connection  
 Adafruit SWD (2x5 1.27mm) Cable Breakout Board ID: 2743  
-![breakout board](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/2743-04.jpg)
+![breakout board](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/2743-04.jpg)  
+**NB this is an SWD breakout, not a JTAG**  
+*The pin outs are different and will have to be mapped!!!*
 3. AVR ISP Breadboard Adapter Mini Kit ID: 1465  
 ![isp adapter](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/1465-04.jpg)
 4. Atmel-ICE & cables  
@@ -114,9 +115,11 @@ add link here
 
 Atmel-ICE is a hardware programmer/debugger.
 
-IPSUM LOREM
+IPSUM LOREM more info
 
-IPSUM LOREM MS7 Mega 2560 ICSP upload details
+Microchip Studio 7 & Mega 2560 ICSP upload details
+
+1. follow instructions on <https://mevihub.com/programming-arduino-with-atmel-ice/>
 
 IPSUM LOREM MS7 Mega 2560 JTAG debugging details
 
@@ -232,12 +235,9 @@ Now that you can actually power up the RN-52 and send it into command mode, let'
 4. Your device is now ready to make a connection. Rather than connect over Bluetooth, the connection will be made over the serial UART.
 5. Open a TeraTerm terminal window on the port (COM 9) your RN-52 has been assigned (115200 Baud, 8,N,1).
 6. With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND). You should now see CMD appear in your terminal.
-
 7. Enable AVRCP  
 By default, the RN-52 does not have the AVRCP enabled. This is part of the extended features. When you type D to see the basic settings, you'll notice a line that says ExtFeatures=XX, where XX is some hex value.
-
 8. Notice that bit 0 is the bit we need to enable to activate the AVRCP button functionality. Send the command S%,07(/r) to enable this bit while leaving the other two bits enabled. Then follow it up with a reboot -- R,1(/r). You should now have AVRCP enabled. Type D to double check the settings.
-
 9. To exit command mode, simply flip the switch back to the OFF position. You will see END appear in the window.
 10. Close TeraTerm.
 
@@ -245,12 +245,20 @@ By default, the RN-52 does not have the AVRCP enabled. This is part of the exten
 
 You are now ready to connect to your Bluetooth device and start streaming some music. Directions on how to pair and connect to the RN-52 can be found in section 1.4 of the user guide.
 
-IPSUM LOREM from Section 1.4
+@TODO IPSUM LOREM from Section 1.4
 
 ### Adafruit Stereo FM Transmitter with RDS/RDBS Breakout - Si4713
 
-IPSUM LOREM
+@TODO IPSUM LOREM
+
+@TODO Add datasheet links
+
+#### TX Antenna
+
+The antenna specs in data sheets are conflicting and confusing.
+Currently using a 22 AWG wire in 18 x 13 cm single wire square loop configuration
+If Equation 30 of AN710 datasheet is correct application for my antenna, I have an inductance of 666 nH.
 
 ### 2.8" TFT Touch Shield for Arduino with Capacitve Touch and microSd
 
-IPSUM LOREM
+@TODO IPSUM LOREM
