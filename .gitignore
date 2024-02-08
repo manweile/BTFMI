@@ -2,6 +2,7 @@
 .vs/
 Debug/
 Release/
+src/
 __vm/
 # file ext to ignore
 *.xml
