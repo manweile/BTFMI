@@ -23,7 +23,7 @@
 #include <SPI.h>
 
 //third party function libraries
-//#include <PrintEx.h>
+#include <PrintEx.h>
 #include <algorithm>
 #include <vector>
 
@@ -110,7 +110,7 @@ void setup() {
 	tft.setTextSize(1);
 
 	// begin with address 0x63 (CS high default)
-	if (! radio.begin()) {
+	if (!radio.begin()) {
 		Serial.print("Couldn't find Si4713 transceiver");
 		tft.println("Couldn't find Si4713 transceiver");
 		delay(500);
@@ -129,6 +129,7 @@ void setup() {
 		if( radio.currNoiseLevel >= BROADCAST_LEVEL) {
 			Serial.print("Broadcast at "); Serial.print(freq/100.00); Serial.print(" Mhz, Current Noise Level: "); Serial.print(radio.currNoiseLevel);
 			Serial.println();
+
 			tft.print("Broadcast at "); tft.print(freq/100.00); tft.print(" Mhz, Current Noise Level: "); tft.print(radio.currNoiseLevel);
 			tft.println();
 		}
@@ -140,12 +141,14 @@ void setup() {
 
 		Serial.print("\nTuning into frequency "); Serial.print(station/100.00); Serial.print(" Mhz");
 		Serial.println();
+
 		tft.print("\nTuning into frequency "); tft.print(station/100.00); tft.print(" Mhz");
 		tft.println();
 	}
 	else {
 		Serial.print("\nTuning into debugging frequency "); Serial.print(FMSTATION/100.00); Serial.print(" Mhz");
 		Serial.println();
+
 		tft.print("\nTuning into debugging frequency "); tft.print(FMSTATION/100.00); tft.print(" Mhz");
 		tft.println();
 	}
@@ -174,27 +177,20 @@ void setup() {
 	*/
 
 	radio.setTXpower(TX_POWER);
-
 	radio.tuneFM(station);
 
 	Serial.print("Setting TX power: "); Serial.print(TX_POWER); Serial.print(" dBuV");
 	Serial.println();
-	tft.print("Setting TX power: "); tft.print(TX_POWER); tft.print(" dBuV");
-	tft.println();
 
 	// This will tell you the status in case you want to read it from the chip
 	radio.readTuneStatus();
 
 	Serial.print("\nFrequency: "); Serial.print(radio.currFreq/100.00);
-	tft.print("\nFrequency: "); tft.print(radio.currFreq/100.00);
 
 	Serial.print("\nFrequency dBuV: "); Serial.print(radio.currdBuV);
-	tft.print("\nFrequency dBuV: "); tft.print(radio.currdBuV);
 
 	Serial.print("\nANT capacitance: "); Serial.print(radio.currAntCap);
 	Serial.println("\n");
-	tft.print("\nANT capacitance: "); tft.print(radio.currAntCap);
-	tft.println();
 
 	prevFreq = radio.currFreq/100.00;
 	prevdBuV = radio.currdBuV;
@@ -312,17 +308,16 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	newBroadcast = defBroadcast;
 
 	//scan the fm band from loEnd to hiEnd in .2 Mhz increments, save frequencies with low enough noise level
+	// Serial print only cause I don't want to clutter up tft screen
 	Serial.print("\nScanning for available frequencies ...");
 	Serial.println();
-	tft.print("\nScanning for available frequencies ...");
-	tft.println();
+
 	for (freq = loEnd; freq <= hiEnd; freq += 20) {
 		radio.readTuneMeasure(freq);
 		radio.readTuneStatus();
 
 		if( radio.currNoiseLevel < maxLevel) {
 			if (showInfo){
-				// Serial print only cause I don't want to clutter up tft screen
 				Serial.print("Available frequency "); Serial.print(freq/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(radio.currNoiseLevel);
 				Serial.println();
 			}
@@ -338,7 +333,6 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	// reverse print the sorted scanned frequencies because I want the quietest frequency to be last datum printed
 	for(int i = scannedFreqs.size() -1; i >= 0; i--) {
 		if(showInfo){
-			//  Serial print only cause I don't want to clutter up tft screen
 			Serial.print("Frequency "); Serial.print(scannedFreqs[i].first/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[i].second);
 			Serial.println();
 		}
@@ -347,15 +341,9 @@ int availableChannels(int maxLevel, int defBroadcast, int loEnd, int hiEnd, bool
 	// display new frequency
 	Serial.print("\nFound "); Serial.print(scannedFreqs.size()); Serial.print(" frequencies with noise less than "); Serial.print(maxLevel);
 	Serial.println();
-	tft.print("\nFound "); tft.print(scannedFreqs.size()); tft.print(" frequencies with noise less than "); tft.print(maxLevel);
-	tft.println();
 
 	Serial.print("Quietest frequency: "); Serial.print(newBroadcast/100.00); Serial.print(" Mhz, Noise Level: "); Serial.print(scannedFreqs[0].second);
 	Serial.println();
-	tft.print("Quietest frequency: "); tft.print(newBroadcast/100.00); tft.print(" Mhz, Noise Level: "); tft.print(scannedFreqs[0].second);
-	tft.println();
-
-	// @TODO save new broadcast frequency to either eeprom (preferable) or sd??
 
 	return newBroadcast;
 }
