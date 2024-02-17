@@ -49,7 +49,7 @@ These libraries come installed with Arduino IDE, so all you have to do is refere
 #include <Wire.h>
 ```
 
-### Third party function libraries to install
+### Arduino libraries to install
 
 [ArduinoSTL](https://www.arduino.cc/reference/en/libraries/arduinostl/)  
 v1.1.0
@@ -57,16 +57,22 @@ v1.1.0
 1. algorithm
 2. vector
 
+```c++
+#include <ArduinoSTL.h>
+#include <algorithm>
+#include <vector>
+```
+
+### Third party function libraries to install
+
 [PrintEx](https://www.arduino.cc/reference/en/libraries/printex/)  
 v1.2.0
 
 ```c++
-#include <algorithm>
-#include <vector>
 #include <PrintEx.h>
 ```
 
-### Third party hardware & libraries to install
+### Third party hardware libraries to install
 
 [Adafruit_FT6206](https://www.arduino.cc/reference/en/libraries/adafruit-ft6206-library/)  
 v1.03
@@ -129,7 +135,7 @@ The RN-52 audio output circuitry consists of a balanced differential speaker out
 (balanced means resistance from ground to either speaker negative output is >1 ohm)  
 The output voltage full scale swing (differential) is 750mV.  
 The speaker output is capable of driving a speaker with an impedance of at least 8 ohms directly.  
-The overall gain of the speaker output is approximately -21 dB to 0 dB in 1.5 dB steps.  
+The overall gain of the speaker output is approximately 0 db to -21 dB in 1.5 dB steps.  
 
 The Si4713 has LIN/RIN unbalanced line level analog inputs, which can be fed directly to the pins or via the 3.5 mm jack.  
 The Si4713 can take a max of 636 mV on line level inputs (this is default setting).
