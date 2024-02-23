@@ -105,7 +105,7 @@ To hardware debug the Mega 2560 R3, 4 things are required:
 2. JTAG .5mm pitch 2x5 connection  
 Adafruit SWD (2x5 1.27mm) Cable Breakout Board ID: 2743  
 ![breakout board](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/2743-04.jpg)  
-**NB this is an SWD breakout, not a JTAG**  
+**NB this is an SWD breakout, not a JTAG breakout**  
 *The pin outs are different and will have to be mapped!!!*
 3. AVR ISP Breadboard Adapter Mini Kit ID: 1465  
 ![isp adapter](https://github.com/manweile/BTFMI/blob/text-to-screen/Images/1465-04.jpg)
@@ -132,18 +132,32 @@ IPSUM LOREM MS7 Mega 2560 JTAG debugging details
 ### Speaker Level to Line Level
 
 The RN-52 audio output circuitry consists of a balanced differential speaker output preceded by a gain stage and a class AB amplifier.  
-(balanced means resistance from ground to either speaker negative output is >1 ohm)  
 The output voltage full scale swing (differential) is 750mV.  
 The speaker output is capable of driving a speaker with an impedance of at least 8 ohms directly.  
 The overall gain of the speaker output is approximately 0 db to -21 dB in 1.5 dB steps.  
 
+| Parameter | Conditions |   | Min | Typ | Max | Unit |
+| --------- | ---------- | - | --- | --- | --- | ---- |
+| Resolution | — || — | — | 16 | Bits |
+| Ouput Sample Rate, Fsample | — || 8 | — | 48 | kHz |
+| Signal to Noise Ratio, SNR | fin = 1 kHz   B/W = 20 Hz→20 kHz  A-Weighted  THD+N < 0.01%  0dBFS signal  Load = 100 kΩ | Fsample | — | 95 | — | dB |
+||| 8 kHz | — | 95 | — | dB |
+||| 16 kHz | — | 95 | — | dB |
+||| 32 kHz | — | 95 | — | dB |
+||| 44.1 kHz | — | 95 | — | dB |
+||| 48 kHz | — | 95 | — | dB |
+| Analog Gain | Analog Gain Resolution = 3 dB || 0 | — | -21 | dB |
+| Output voltage full-scale swing (differential) ||| — | 750 | — | mV rms |
+| Allowed Load | Resistive || 16(8) | — | O.C. | Ω |
+|| Capacitive || — | — | 500 | pF |
+| THD + N 100 kΩ load ||| — | — | 0.01 | % |
+| THD + N 16 kΩ load ||| — | — | 0.1 | % |
+| SNR (Load = 16Ω, 0 dBFS input relative to digital silence) ||| — | 95 | — | db |
+
 The Si4713 has LIN/RIN unbalanced line level analog inputs, which can be fed directly to the pins or via the 3.5 mm jack.  
 The Si4713 can take a max of 636 mV on line level inputs (this is default setting).
 
-The RN-52 output speaker level needs to be:
-
-1. summed from balanced to unbalanced
-2. attenuated from 750 mV to less than 636 mV.
+The RN-52 output speaker level needs to be attenuated from 750 mV to less than or equal to 636 mV.
 
 schematic or fritzing diagram here
 
@@ -158,7 +172,7 @@ It can handle an input voltage of about 3.0 - 3.6V.
 Voltages above or below this range can result in the module not working properly or, worse, damaging the module.
 Make sure you select a power supply that can provide the correct amount of voltage to the device.
 
-As usual, connect the GND pin to GND, and connect the 3.3V pin to the Vcc pin on the supply.
+Connect the GND pin to GND, and connect the 3.3V pin to the Vcc pin on the supply.
 The PWR_EN pin can also be attached to a button to allow the user to power up the module when it is desired, even if power is already supplied.
 
 This is useful in headset/hands-free applications where a battery is attached to the module but the module doesn't need to be on all the time.
