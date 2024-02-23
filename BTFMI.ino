@@ -181,38 +181,38 @@ void setup() {
 }
 
 void loop() {
-	//// react to cap screen use input actions
-	//if (ts.touched())
-	//{
-		//// Retrieve a point
-		//TS_Point p = ts.getPoint();
-//
-		//// rotate coordinate system & flip it around to match the screen.
-		//p.x = map(p.x, 0, 240, 240, 0);
-		//p.y = map(p.y, 0, 320, 320, 0);
-		//int y = tft.height() - p.x;
-		//int x = p.y;
-//
-		//// @TODO just for reference now, delete once direct control buttons are set up
-		////if (recordOn)
-		////{
-			////if((x > REDBUTTON_X) && (x < (REDBUTTON_X + REDBUTTON_W))) {
-				////if ((y > REDBUTTON_Y) && (y <= (REDBUTTON_Y + REDBUTTON_H))) {
-					//////Serial.print("Red btn hit\n");
-					////redBtn();
-				////}
-			////}
-		////}
-		////else //Record is off (recordOn == false)
-		////{
-			////if((x > GREENBUTTON_X) && (x < (GREENBUTTON_X + GREENBUTTON_W))) {
-				////if ((y > GREENBUTTON_Y) && (y <= (GREENBUTTON_Y + GREENBUTTON_H))) {
-					//////Serial.print("Green btn hit\n");
-					////greenBtn();
-				////}
-			////}
-		////}
-	//}
+	// react to cap screen use input actions
+	if (ts.touched())
+	{
+		// Retrieve a point
+		TS_Point p = ts.getPoint();
+
+		// rotate coordinate system & flip it around to match the screen.
+		p.x = map(p.x, 0, 240, 240, 0);
+		p.y = map(p.y, 0, 320, 320, 0);
+		int y = tft.height() - p.x;
+		int x = p.y;
+
+		// @TODO just for reference now, delete once direct control buttons are set up
+		//if (recordOn)
+		//{
+			//if((x > REDBUTTON_X) && (x < (REDBUTTON_X + REDBUTTON_W))) {
+				//if ((y > REDBUTTON_Y) && (y <= (REDBUTTON_Y + REDBUTTON_H))) {
+					////Serial.print("Red btn hit\n");
+					//redBtn();
+				//}
+			//}
+		//}
+		//else //Record is off (recordOn == false)
+		//{
+			//if((x > GREENBUTTON_X) && (x < (GREENBUTTON_X + GREENBUTTON_W))) {
+				//if ((y > GREENBUTTON_Y) && (y <= (GREENBUTTON_Y + GREENBUTTON_H))) {
+					////Serial.print("Green btn hit\n");
+					//greenBtn();
+				//}
+			//}
+		//}
+	}
 
 	if(DEBUG_ON) {
 		// for changes in antenna capacitance
