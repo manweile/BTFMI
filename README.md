@@ -139,7 +139,7 @@ The overall gain of the speaker output is approximately 0 db to -21 dB in 1.5 dB
 | Parameter | Conditions |   | Min | Typ | Max | Unit |
 | --------- | ---------- | - | --- | --- | --- | ---- |
 | Resolution | — || — | — | 16 | Bits |
-| Ouput Sample Rate, Fsample | — || 8 | — | 48 | kHz |
+| Output Sample Rate, Fsample | — || 8 | — | 48 | kHz |
 | Signal to Noise Ratio, SNR | fin = 1 kHz   B/W = 20 Hz→20 kHz  A-Weighted  THD+N < 0.01%  0dBFS signal  Load = 100 kΩ | Fsample | — | 95 | — | dB |
 ||| 8 kHz | — | 95 | — | dB |
 ||| 16 kHz | — | 95 | — | dB |
@@ -193,6 +193,10 @@ GPIO9 is used to tell the module to enter command mode.
 If GPIO9 is HIGH or left floating, the module will remain in its default data mode, streaming audio or data.
 
 In order to enter command mode, GPIO9 must be pulled LOW (to GND). Refer to fritzing diagram.
+
+### Firmware Upgrade
+
+IPSUM LOPREM
 
 ### UART
 
@@ -250,22 +254,47 @@ Download and read the [Bluetooth Audio Module Command Reference User's Guide](ht
 Now that you can actually power up the RN-52 and send it into command mode, let's talk about changing the settings, and thus the behavior, of the Bluetooth module.
 
 1. Make sure the CMD Mode switch is in the OFF position (GPIO9 NOT shorted to GND - refer to fritzing diagram).
-2. Turn on your RN-52.
-3. The two status LEDs should both stay solid for about 1 second and then begin flashing alternately.
+2. Turn on your RN-52, and hold down the power reset button for approx 1 second.
+3. The two status LEDs on the RN-52 should both stay solid for about 1 second and then begin flashing alternately.
 4. Your device is now ready to make a connection. Rather than connect over Bluetooth, the connection will be made over the serial UART.
 5. Open a TeraTerm terminal window on the port (COM 9) your RN-52 has been assigned (115200 Baud, 8,N,1).
-6. With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND). You should now see CMD appear in your terminal.
-7. Enable AVRCP  
-By default, the RN-52 does not have the AVRCP enabled. This is part of the extended features. When you type D to see the basic settings, you'll notice a line that says ExtFeatures=XX, where XX is some hex value.
-8. Notice that bit 0 is the bit we need to enable to activate the AVRCP button functionality. Send the command S%,07(/r) to enable this bit while leaving the other two bits enabled. Then follow it up with a reboot -- R,1(/r). You should now have AVRCP enabled. Type D to double check the settings.
-9. To exit command mode, simply flip the switch back to the OFF position. You will see END appear in the window.
-10. Close TeraTerm.
+6. With the terminal open and connected to the RN-52, flip the CMD Mode switch to the ON position (GPIO9 shorted to GND). You should now see CMD appear in your terminal.  
+screenshot 1 here
+7. Turn on echo by typing + and hitting return.  
+Screenshot 2 here
+8. Enable AVRCP. By default, the RN-52 does not have the AVRCP enabled. This is part of the extended features. When you type D to see the basic settings, you'll notice a line that says ExtFeatures=XX, where XX is some hex value.  
+screenshot 3 & 4 here
+9. Notice that bit 0 is the bit we need to enable to activate the AVRCP button functionality. Send the command S%,07(/r) to enable this bit while leaving the other two bits enabled.  
+screenshot 5 here
+10. Then follow it up with a reboot -- R,1(/r), wait until you see reboot,  
+Screenshot 6 here  
+then flip the CMD Mode switch back to Off.  
+Hold down the power reset button for approx 1 second. You should now have AVRCP enabled. Flip the CMD Mode switch back to on (and turn echo on as well).  
+Screenshot 7 here
+11. Type D to double check the settings.  
+Screenshot 8 & 9 here
+12. To exit command mode, simply flip the switch back to the OFF position. You will see END appear in the window.  
+Screenshot 10 here
+13. Close TeraTerm.
+
+#### RN-52 Status LED Functions
+
+| Green LED | Red LED | Description |
+| --------- | ------- | ----------- |
+| Flashing | Flashing | The module is discoverable |
+| Off | Flashing | The module is connected |
+| Flashing | Off | The module is connectable |
 
 #### Connect and Play
 
-You are now ready to connect to your Bluetooth device and start streaming some music. Directions on how to pair and connect to the RN-52 can be found in section 1.4 of the user guide.
-
-@TODO IPSUM LOREM from Section 1.4
+1. The green led and red led should be flashing alternately.
+2. Open the Bluetooth tab on your Android device
+3. Wait for scan to finish.
+4. You should see an available device that matches the BTName from the "D" command  
+screenshot 11 here
+5. Select it for pairing.
+6. If pairing was successful, the green led will stop flashing and the red led will start flashing.
+7. You can now start streaming music.
 
 ### Adafruit Stereo FM Transmitter with RDS/RDBS Breakout - Si4713
 
